@@ -2,5 +2,7 @@
 -- Process configuration file
 dofile "../../../../scripts/config.lua"
 
-LightConsoleApp("core_tests", path.getabsolute("../tests"))
+local PROJ_PATH = path.getabsolute("..")
+
+LightStaticLib("template_proj", PROJ_PATH)
 AddDependency("engine/modules/core")

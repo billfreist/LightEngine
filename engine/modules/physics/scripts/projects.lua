@@ -3,5 +3,5 @@
 dofile "../../../../scripts/config.lua"
 
     -- Process individual module project scripts
-    dofile "core.lua"
+    dofile "physics.lua"
     dofile "tests.lua"

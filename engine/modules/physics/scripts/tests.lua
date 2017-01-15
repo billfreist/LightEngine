@@ -2,5 +2,6 @@
 -- Process configuration file
 dofile "../../../../scripts/config.lua"
 
-LightConsoleApp("core_tests", path.getabsolute("../tests"))
+LightConsoleApp("physics_tests", path.getabsolute("../tests"))
 AddDependency("engine/modules/core")
+AddDependency("engine/modules/physics")

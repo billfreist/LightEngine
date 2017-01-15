@@ -101,6 +101,7 @@ end
 
 function LightStaticLib (name, directory)
     project (name)
+        uuid (os.uuid(name))
         kind "StaticLib"
 
         _CommonProjectConfig(name, directory)
@@ -108,7 +109,9 @@ end
 
 function LightConsoleApp (name, directory)
     project (name)
+        uuid (os.uuid(name))
         kind "ConsoleApp"
 
+        printf("test %s, %s", name, directory)
         _CommonProjectConfig(name, directory)
 end
