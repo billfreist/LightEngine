@@ -1,4 +1,12 @@
+///
+/// LICENSE
+///
+
 #pragma once
+
+#ifndef LITE_CORE_H_INCLUDED
+#   error "core.h must be included first"
+#endif
 #define LITE_MACROS_H_INCLUDED
 
 #undef NULL
@@ -21,6 +29,11 @@
 #   define LITE_ASSERT(expr)
 #endif
 
+// Array Size
+template<class T, uint32_t N>
+constexpr uint32_t _ArraySizeImpl (const T (&)[N]) { return N; }
+#define LITE_ARRAY_SIZE(a) _ArraySizeImpl(a)
+
 // Ref
 template<typename...Args>
 inline void _RefImpl (const Args&... args) {
@@ -32,20 +45,6 @@ inline void _RefImpl (const Args&... args) {
 }
 #define LITE_REF(...) _RefImpl(__VA_ARGS__)
 
-// Enabled
-namespace lite {
-
-template<int VAL>
-inline bool IsEnabled () {
-    return true;
-}
-template<>
-inline bool IsEnabled<0> () {
-    return false;
-}
-
-} // lite
-
 // Alignment
 #if LITE_OS_WINDOWS
 #   define LITE_ALIGN_8         __declspec(align(8))
@@ -55,3 +54,45 @@ inline bool IsEnabled<0> () {
 #else
 #   error "no implemented"
 #endif
+
+//
+// Concatenation
+//
+#define LITE_CONCAT(a, b) _LITE_CONCAT(a, b)
+#define _LITE_CONCAT(a, b) a##b
+
+//
+// Macro VA arguments
+//
+#define LITE_ARG_COUNT(...) _LITE_ARG_COUNT LITE_ARGS_FROWARD(__VA_ARGS__, 6, 5, 4, 3, 2, 1)
+#define _LITE_ARG_COUNT(_1, _2, _3, _4, _5, _6, COUNT, ...) COUNT
+
+#define LITE_ARGS_FROWARD(...) _LITE_ARGS_FROWARD_OPEN __VA_ARGS__ _LITE_ARGS_FROWARD_CLOSE
+#define _LITE_ARGS_FROWARD_OPEN (
+#define _LITE_ARGS_FROWARD_CLOSE )
+
+//
+// Macro dispatching
+//
+#define LITE_MACRO_DISPATCH(prefix, ...) _LITE_MACRO_DISPATCH(prefix, LITE_ARG_COUNT(__VA_ARGS__) )
+#define _LITE_MACRO_DISPATCH(prefix, count) LITE_CONCAT(prefix, count)
+
+//
+// Namespace
+//
+#define LITE_NAMESPACE_BEGIN(...) LITE_MACRO_DISPATCH(_LITE_NAMESPACE_BEGIN_, __VA_ARGS__) LITE_ARGS_FROWARD(__VA_ARGS__)
+#define LITE_NAMESPACE_END(...)   LITE_MACRO_DISPATCH(_LITE_NAMESPACE_END_, __VA_ARGS__) LITE_ARGS_FROWARD(__VA_ARGS__)
+
+#define _LITE_NAMESPACE_BEGIN_1(a1)                     namespace a1 {
+#define _LITE_NAMESPACE_BEGIN_2(a1, a2)                 _LITE_NAMESPACE_BEGIN_1(a1)                 _LITE_NAMESPACE_BEGIN_1(a2)
+#define _LITE_NAMESPACE_BEGIN_3(a1, a2, a3)             _LITE_NAMESPACE_BEGIN_2(a1, a2)             _LITE_NAMESPACE_BEGIN_1(a3)
+#define _LITE_NAMESPACE_BEGIN_4(a1, a2, a3, a4)         _LITE_NAMESPACE_BEGIN_3(a1, a2, a3)         _LITE_NAMESPACE_BEGIN_1(a4)
+#define _LITE_NAMESPACE_BEGIN_5(a1, a2, a3, a4, a5)     _LITE_NAMESPACE_BEGIN_4(a1, a2, a3, a4)     _LITE_NAMESPACE_BEGIN_1(a5)
+#define _LITE_NAMESPACE_BEGIN_6(a1, a2, a3, a4, a5, a6) _LITE_NAMESPACE_BEGIN_5(a1, a2, a3, a4, a5) _LITE_NAMESPACE_BEGIN_1(a6)
+
+#define _LITE_NAMESPACE_END_1(a1)                     }
+#define _LITE_NAMESPACE_END_2(a1, a2)                 _LITE_NAMESPACE_END_1(a1)                 _LITE_NAMESPACE_END_1(a2)
+#define _LITE_NAMESPACE_END_3(a1, a2, a3)             _LITE_NAMESPACE_END_2(a1, a2)             _LITE_NAMESPACE_END_1(a3)
+#define _LITE_NAMESPACE_END_4(a1, a2, a3, a4)         _LITE_NAMESPACE_END_3(a1, a2, a3)         _LITE_NAMESPACE_END_1(a4)
+#define _LITE_NAMESPACE_END_5(a1, a2, a3, a4, a5)     _LITE_NAMESPACE_END_4(a1, a2, a3, a4)     _LITE_NAMESPACE_END_1(a5)
+#define _LITE_NAMESPACE_END_6(a1, a2, a3, a4, a5, a6) _LITE_NAMESPACE_END_5(a1, a2, a3, a4, a5) _LITE_NAMESPACE_END_1(a6)

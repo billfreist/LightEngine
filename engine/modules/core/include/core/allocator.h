@@ -1,3 +1,6 @@
+///
+/// LICENSE
+///
 
 #pragma once
 
@@ -14,7 +17,7 @@
 // Stack allocations
 #define LITE_STACK_ALLOC(T, n) reinterpret_cast<T *>(alloca(sizeof(T) * n))
 
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 template<typename T>
 inline void Delete (T * ptr) {
@@ -24,4 +27,4 @@ inline void Delete (T * ptr) {
     }
 }
 
-} // common
+LITE_NAMESPACE_END(lite)

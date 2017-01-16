@@ -1,6 +1,10 @@
+///
+/// LICENSE
+///
+
 #pragma once
 
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 // SpinLock
 class LITE_ALIGN_CACHELINE SpinLock final {
@@ -18,6 +22,6 @@ private:
     uint32_t         m_spinCount;
 };
 
-} // common
+LITE_NAMESPACE_END(lite)
 
 #include <core/inline/spin_lock.inl>

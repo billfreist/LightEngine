@@ -1,7 +1,10 @@
+///
+/// LICENSE
+///
 
 #include "core_pch.h"
 
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 void AtomicSet (volatile int32_t * ptr, int32_t newValue) {
     InterlockedExchange(reinterpret_cast<volatile long *>(ptr), newValue);
@@ -19,4 +22,4 @@ bool AtomicBoolCompareAndSwap64 (volatile int64_t * ptr, int64_t newValue, int64
     return InterlockedCompareExchange64(ptr, newValue, comparand) == comparand;
 }
 
-} // common
+LITE_NAMESPACE_END(lite)

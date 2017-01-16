@@ -1,3 +1,7 @@
+///
+/// LICENSE
+///
+
 #pragma once
 
 #ifdef _MSC_VER
@@ -10,7 +14,7 @@
 #define interface struct LITE_NO_VTABLE
 
 
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 #define LITE_COORD3(type, prefix, arg0, arg1, arg2) \
     struct Coord3##prefix {                           \
@@ -61,5 +65,4 @@ public:
 
 };
 
-
-} // common
+LITE_NAMESPACE_END(lite)

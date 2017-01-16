@@ -1,7 +1,10 @@
+///
+/// LICENSE
+///
+
 #include "core_pch.h"
 
-
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 // Exported
 uint32_t ThreadGetCoreCount () {
@@ -10,7 +13,7 @@ uint32_t ThreadGetCoreCount () {
     GetSystemInfo(&sysinfo);
     return uint32_t(sysinfo.dwNumberOfProcessors);
 #else
-#error "not implemented"
+#   error "not implemented"
 #endif
 }
 
@@ -18,7 +21,7 @@ uint32_t ThreadGetId () {
 #if LITE_OS_WINDOWS
     return ::GetCurrentThreadId();
 #else
-#error "not implemented"
+#   error "not implemented"
 #endif
 }
 
@@ -26,7 +29,7 @@ void ThreadSleep (uint32_t timeMs) {
 #if LITE_OS_WINDOWS
     ::Sleep(timeMs);
 #else
-#error "not implemented"
+#   error "not implemented"
 #endif
 }
 
@@ -34,8 +37,8 @@ void ThreadYield () {
 #if LITE_OS_WINDOWS
     ::SwitchToThread();
 #else
-#error "not implemented"
+#   error "not implemented"
 #endif
 }
 
-} // common
+LITE_NAMESPACE_END(lite)

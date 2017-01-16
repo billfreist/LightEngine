@@ -1,7 +1,10 @@
+///
+/// LICENSE
+///
 
 #include "core_tests_pch.h"
 
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 void TestAlloc () {
     // Macro Alloc/Free
@@ -19,4 +22,4 @@ void TestAlloc () {
     delete ptr;
 }
 
-} // common
+LITE_NAMESPACE_END(lite)

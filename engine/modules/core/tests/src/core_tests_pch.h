@@ -1,15 +1,14 @@
-
-#include <core/macros.h>
-
-// 
+///
+/// LICENSE
+///
 
 #include <core/core.h>
 
 // Functions
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 void TestAlloc ();
 void TestCompress ();
 void TestTcpSock ();
 
-} // common
+LITE_NAMESPACE_END(lite)

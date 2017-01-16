@@ -1,7 +1,10 @@
+///
+/// LICENSE
+///
+
 #include "core_pch.h"
 
-
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 const uint32_t SPIN_COUNT = 75;
 const uint32_t SPIN_COUNT_MP = 1000;
@@ -37,4 +40,4 @@ void SpinLock::Enter () {
         ThreadYield();
 }
 
-} // lite
+LITE_NAMESPACE_END(lite)

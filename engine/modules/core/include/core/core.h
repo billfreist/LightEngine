@@ -1,14 +1,13 @@
+///
+/// LICENSE
+///
 
 #pragma once
 
 #ifdef LITE_CORE_H_INCLUDED
-#error "ADLFKJSDF0"
+#   error "Cannot include core.h more than once"
 #endif
 #define LITE_CORE_H_INCLUDED
-
-#ifndef LITE_MACROS_H_INCLUDED
-#error "Must include Macros.h first"
-#endif
 
 #include <atomic>
 #include <stdint.h>
@@ -20,6 +19,20 @@
 
 #undef NULL
 #define NULL nullptr
+
+#include <core/macros.h>
+
+// Enabled
+LITE_NAMESPACE_BEGIN(lite)
+template<int VAL>
+inline bool IsEnabled () {
+    return true;
+}
+template<>
+inline bool IsEnabled<0> () {
+    return false;
+}
+LITE_NAMESPACE_END(lite)
 
 #include <core/types.h>
 #include <core/allocator.h>

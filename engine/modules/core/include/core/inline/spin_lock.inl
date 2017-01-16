@@ -2,7 +2,7 @@
 
 #include <core/thread.h>
 
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 inline bool SpinLock::TryEnter () {
     const int32_t threadId = ThreadGetId();
@@ -18,4 +18,4 @@ inline void SpinLock::Leave () {
     LITE_ASSERT(unlocked);
 }
 
-} // common
+LITE_NAMESPACE_END(lite)

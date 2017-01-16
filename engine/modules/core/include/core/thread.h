@@ -1,6 +1,10 @@
+///
+/// LICENSE
+///
+
 #pragma once
 
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 typedef std::thread Thread;
 
@@ -11,4 +15,4 @@ uint32_t ThreadGetId ();
 void     ThreadSleep (uint32_t timeMs);
 void     ThreadYield ();
 
-} // common
+LITE_NAMESPACE_END(lite)

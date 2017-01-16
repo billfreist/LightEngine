@@ -1,7 +1,10 @@
+///
+/// LICENSE
+///
 
 #pragma once
 
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 class MiniZCompressor {
 public:
@@ -43,4 +46,4 @@ private:
 
 };
 
-} // common
+LITE_NAMESPACE_END(lite)

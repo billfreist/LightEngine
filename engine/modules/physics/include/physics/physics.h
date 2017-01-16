@@ -2,7 +2,9 @@
 /// LICENSE
 ///
 
-namespace lite { namespace physics {
+#pragma once
+
+LITE_NAMESPACE_BEGIN(lite, physics)
 
 
-}} // lite::physics
+LITE_NAMESPACE_END(lite, physics)

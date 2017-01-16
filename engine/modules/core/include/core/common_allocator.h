@@ -1,8 +1,12 @@
+///
+/// LICENSE
+///
+
 /// CommonAllocator
 
 #pragma once
 
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 class CommonAllocator {
 public:
@@ -10,5 +14,5 @@ public:
     static void Free (void * ptr);
 };
 
-} // common
+LITE_NAMESPACE_END(lite)
 

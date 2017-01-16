@@ -1,9 +1,10 @@
+///
+/// LICENSE
+///
 
 #include "core_pch.h"
 
-
-
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 template<typename T, typename... Args>
 static void Construct (T * ptr, Args... args) {
@@ -53,4 +54,4 @@ void MemZero (void * ptr, size_t bytes) {
 }
 
 
-} // common
+LITE_NAMESPACE_END(lite)

@@ -1,3 +1,6 @@
+///
+/// LICENSE
+///
 
 #include "core_pch.h"
 #include <malloc.h>
@@ -13,7 +16,7 @@ void operator delete (void * ptr) noexcept {
 }
 
 
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 void * CommonAllocator::Alloc (size_t bytes) {
     return ::malloc(bytes);
@@ -23,4 +26,4 @@ void CommonAllocator::Free (void * ptr) {
     ::free(ptr);
 }
 
-} // common
+LITE_NAMESPACE_END(lite)

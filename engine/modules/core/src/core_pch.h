@@ -1,10 +1,11 @@
+///
+/// LICENSE
+///
 
-#include <core/macros.h>
+#include <core/core.h>
 
 #include <cstring>
 #if LITE_OS_WINDOWS
-#include <Windows.h>
-#include <WinBase.h>
+#   include <Windows.h>
+#   include <WinBase.h>
 #endif
-
-#include <core/core.h>

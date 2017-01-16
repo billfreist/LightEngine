@@ -1,11 +1,13 @@
+///
+/// LICENSE
+///
 
 #include "core_pch.h"
 #define MINIZ_HEADER_FILE_ONLY
 #include <compress/miniz.h>
 #include "miniz/miniz.c"
 
-
-namespace lite {
+LITE_NAMESPACE_BEGIN(lite)
 
 const int MEM_LEVEL   = 9;
 const int WINDOW_BITS = MZ_DEFAULT_WINDOW_BITS;
@@ -151,4 +153,4 @@ void MiniZCompressor::InitDecompressContext () {
     mz_inflateInit2(static_cast<mz_streamp>(m_decompressContext), WINDOW_BITS);
 }
 
-} // common
+LITE_NAMESPACE_END(lite)
