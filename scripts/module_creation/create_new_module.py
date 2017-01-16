@@ -6,7 +6,7 @@ import shutil
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--name', help='foo help')
+    parser.add_argument('--name', help='The name of the new module to create')
     args = parser.parse_args()
 
     moduleDir = os.path.join('../../engine/modules/', args.name)
