@@ -17,13 +17,8 @@
 #include <new>
 #include <fstream>
 
-#undef NULL
-#define NULL nullptr
-
-#include <core/macros.h>
-
 // Enabled
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 template<int VAL>
 inline bool IsEnabled () {
     return true;
@@ -32,13 +27,16 @@ template<>
 inline bool IsEnabled<0> () {
     return false;
 }
-LITE_NAMESPACE_END(lite)
+} // lite
 
-#include <core/types.h>
+// Include macros first
+#include <core/macros.h>
+
+// The include everything else
 #include <core/allocator.h>
 #include <core/common_allocator.h>
-#include <core/atomic.h>
 #include <core/memory.h>
+#include <core/types.h>
+#include <core/atomic.h>
 #include <core/spin_lock.h>
 #include <core/thread.h>
-

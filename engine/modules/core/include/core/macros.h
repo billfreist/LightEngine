@@ -31,19 +31,19 @@
 
 // Array Size
 template<class T, uint32_t N>
-constexpr uint32_t _ArraySizeImpl (const T (&)[N]) { return N; }
-#define LITE_ARRAY_SIZE(a) _ArraySizeImpl(a)
+constexpr uint32_t lite_ArraySizeImpl (const T (&)[N]) { return N; }
+#define LITE_ARRAY_SIZE(a) lite_ArraySizeImpl(a)
 
 // Ref
 template<typename...Args>
-inline void _RefImpl (const Args&... args) {
+inline void lite_RefImpl (const Args&... args) {
     for (;;) {
         if (::lite::IsEnabled<true>())
             break;
-        _RefImpl(args...);
+        lite_RefImpl(args...);
     }
 }
-#define LITE_REF(...) _RefImpl(__VA_ARGS__)
+#define LITE_REF(...) lite_RefImpl(__VA_ARGS__)
 
 // Alignment
 #if LITE_OS_WINDOWS
