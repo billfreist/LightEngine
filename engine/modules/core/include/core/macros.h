@@ -62,6 +62,12 @@ inline void lite_RefImpl (const Args&... args) {
 #define _LITE_CONCAT(a, b) a##b
 
 //
+// Stringify
+//
+#define LITE_STRINGIFY(s)  _LITE_STRINGIFY(s)
+#define _LITE_STRINGIFY(s) #s
+
+//
 // Macro VA arguments
 //
 #define LITE_ARG_COUNT(...) _LITE_ARG_COUNT LITE_ARGS_FROWARD(__VA_ARGS__, 6, 5, 4, 3, 2, 1)

@@ -33,6 +33,7 @@ inline bool IsEnabled<0> () {
 #include <core/macros.h>
 
 // The include everything else
+#include <core/tags.h>
 #include <core/allocator.h>
 #include <core/common_allocator.h>
 #include <core/memory.h>
