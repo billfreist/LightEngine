@@ -90,13 +90,38 @@ local function _CommonProjectConfig (name, directory)
     configuration {}
 end
 
-function AddDependency (modulePath)
-    includedirs {
-        path.join(ROOT_DIR, modulePath, "include"),
-    }
-    links {
-        path.getname(modulePath)
-    }
+function AddDepsLib (params, toProcess)
+    for _, v in ipairs(toProcess) do
+        if table.contains(params.Finished, v) == false then
+            table.insert(params.Finished, v)
+            includedirs {
+                path.join(ROOT_DIR, v, "include")
+            }
+
+            -- Recurse through
+            dofile (path.join(ROOT_DIR, v, "scripts", "deps.lua"))
+        end
+    end
+end
+
+function AddDepsApplication (params, toProcess)
+    for _, v in ipairs(toProcess) do
+        if table.contains(params.Finished, v) == false then
+            table.insert(params.Finished, v)
+            includedirs {
+                path.join(ROOT_DIR, v, "include")
+            }
+            links {
+                path.getname(v)
+            }
+
+            -- Process externals
+            dofile (path.join(ROOT_DIR, v, "scripts", "externals.lua"))
+
+            -- Recurse through
+            dofile (path.join(ROOT_DIR, v, "scripts", "deps.lua"))
+        end
+    end
 end
 
 function LightStaticLib (name, directory)
@@ -105,6 +130,14 @@ function LightStaticLib (name, directory)
         kind "StaticLib"
 
         _CommonProjectConfig(name, directory)
+
+        -- Process deps
+        DEPS_PARAMS = {
+            Callback = AddDepsLib,
+            Finished = {}
+        }
+        dofile (path.join(ROOT_DIR, directory, "scripts", "deps.lua"))
+        DEPS_PARAMS = nil
 end
 
 function LightConsoleApp (name, directory)
@@ -112,6 +145,13 @@ function LightConsoleApp (name, directory)
         uuid (os.uuid(name))
         kind "ConsoleApp"
 
-        printf("test %s, %s", name, directory)
         _CommonProjectConfig(name, directory)
+
+        -- Process deps
+        DEPS_PARAMS = {
+            Callback = AddDepsApplication,
+            Finished = {}
+        }
+        dofile (path.join(ROOT_DIR, directory, "scripts", "deps.lua"))
+        DEPS_PARAMS = nil
 end

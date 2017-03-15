@@ -9,6 +9,7 @@ solution "light_engine"
     dofile "../engine/modules/core/scripts/projects.lua"
 
     -- Engine
+    dofile "../engine/modules/graphics/scripts/projects.lua"
     dofile "../engine/modules/physics/scripts/projects.lua"
 
     configuration {}
