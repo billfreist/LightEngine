@@ -44,6 +44,10 @@ struct Type3 {
         "Type must be integral or floating point"
     );
 
+    Type3 () = default;
+    Type3 (tag::Uninitialized) { }
+    Type3 (T x, T y, T z) : x(x), y(y), z(z) { }
+
     T x, y, z;
 };
 using Vec3i = Type3<int32_t>;
@@ -95,17 +99,20 @@ public:
 
     Vec4f m_vec;
 
-    Quaternion (tags::Identity)
+    Quaternion (tag::Identity)
         : m_vec{ 0.0f, 0.0f, 0.0f, 1.0f }
     {
     }
 
-    Quaternion (const Vec4f & raw) : m_vec(raw) { 
+    Quaternion (tag::Uninitialized) {
+    }
+
+    Quaternion (const Vec4f & raw) : m_vec(raw) {
     }
 
     Quaternion (float x, float y, float z, float w)
         : m_vec{ x, y, z, w }
-    {    
+    {
     }
 
     Quaternion (const Vec3f & axis, float angle) {
@@ -118,9 +125,15 @@ public:
 class Transform {
 public:
 
-    Transform (tags::Identity)
-        : m_rotation{ Identity::kTag }
+    Transform (tag::Identity)
+        : m_rotation{ tag::Identity{} }
         , m_position{ 0.0f, 0.0f, 0.0f }
+    {
+    }
+
+    Transform (tag::Uninitialized)
+        : m_rotation{ tag::Uninitialized{} }
+        , m_position{ tag::Uninitialized{} }
     {
     }
 
@@ -172,14 +185,46 @@ public:
     ConstIterator end () const   { return Term(); }
 };
 
-// Lock
-class Lock final : std::mutex {
+// ExplicitConstructor
+template<class T>
+class ExplicitConstructor {
 public:
 
-    void Enter ()    { std::mutex::lock(); }
-    bool TryEnter () { std::mutex::try_lock(); }
-    void Leave ()    { std::mutex::unlock(); }
+    ~ExplicitConstructor ();
+
+    void Init ();
+    void Destroy ();
+
+    T * Get () { return reinterpret_cast<T *>(&m_mem); }
+    T * operator-> () { return Get(); }
+    T & operator* () { return *Get(); }
+
+private:
+
+    using Memory = std::aligned_storage<sizeof(T), alignof(T)>;
+
+    Memory m_mem;
+    bool   m_isInit = false;
 };
+
+template<class T>
+ExplicitConstructor<T>::~ExplicitConstructor () {
+    LITE_ASSERT(!m_isInit);
+}
+
+template<class T>
+void ExplicitConstructor<T>::Init () {
+    LITE_ASSERT(!m_isInit);
+    m_isInit = true;
+    new(&m_mem) T;
+}
+
+template<class T>
+void ExplicitConstructor<T>::Destroy () {
+    LITE_ASSERT(m_isInit);
+    m_isInit = false;
+    Get()->~T();
+}
 
 
 #define LITE_DEFINE_ENUM_BIT_OPERATORS(e)                                                                                  \

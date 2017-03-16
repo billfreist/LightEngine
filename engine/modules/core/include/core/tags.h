@@ -4,12 +4,9 @@
 
 #pragma once
 
-LITE_NAMESPACE_BEGIN(lite)
+LITE_NAMESPACE_BEGIN(lite, tag)
 
-enum class Identity { kTag };
+enum class Identity      { };
+enum class Uninitialized { };
 
-LITE_NAMESPACE_BEGIN(tags)
-
-using lite::Identity;
-
-LITE_NAMESPACE_END(lite, tags)
+LITE_NAMESPACE_END(lite, tag)
