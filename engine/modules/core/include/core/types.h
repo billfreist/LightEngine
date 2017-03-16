@@ -160,15 +160,15 @@ public:
     const T * Term () const { return std::vector<T>::data() + std::vector<T>::size(); }
 
     void Push (const T & data) { std::vector<T>::push_back(data); }
-    T    Pop ()                { T tmp = std::vector<T>::back(); std::vector<T>::pop_back(); return tmp; }
+    T    Pop ()                { T tmp(std::move(std::vector<T>::back())); std::vector<T>::pop_back(); return tmp; }
 
     void     Clear ()       { std::vector<T>::clear(); }
     void     Reset ()       { std::vector<T>::clear(); }
 
-    uint32_t GetCount () const { return uint32_t(std::vector<T>::size()); }
+    uint32_t GetCount () const            { return uint32_t(std::vector<T>::size()); }
     void     SetCount (uint32_t newCount) { std::vector<T>::resize(newCount); }
 
-    uint32_t GetCapacity () const { return uint32_t(std::vector<T>::capacity()); }
+    uint32_t GetCapacity () const            { return uint32_t(std::vector<T>::capacity()); }
     void     SetCapacity (uint32_t capacity) { std::vector<T>::reserve(capacity); }
 
     T & operator[] (uint32_t i)             { return std::vector<T>::[i]; }
@@ -185,6 +185,7 @@ public:
     ConstIterator end () const   { return Term(); }
 };
 
+
 // ExplicitConstructor
 template<class T>
 class ExplicitConstructor {
@@ -195,9 +196,9 @@ public:
     void Init ();
     void Destroy ();
 
-    T * Get () { return reinterpret_cast<T *>(&m_mem); }
+    T * Get ()        { return reinterpret_cast<T *>(&m_mem); }
     T * operator-> () { return Get(); }
-    T & operator* () { return *Get(); }
+    T & operator* ()  { return *Get(); }
 
 private:
 
