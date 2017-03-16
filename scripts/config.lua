@@ -76,6 +76,7 @@ local function _CommonProjectConfig (name, directory)
         path.join(directory, "include", "**.h"),
         path.join(directory, "include", "**.inl"),
         path.join(directory, "natvis", "**.natvis"),
+        path.join(directory, "scripts", "**.lua"),
         path.join(directory, "src", "**.h"),
         path.join(directory, "src", "**.inl"),
         path.join(directory, "src", "**.cpp"),
@@ -84,6 +85,7 @@ local function _CommonProjectConfig (name, directory)
     vpaths {
         ["include/*"] = { path.join(directory, "include", "**") },
         ["src/*"]     = { path.join(directory, "src", "**") },
+        ["genie/*"]   = { path.join(directory, "scripts", "**") },
         ["natvis/*"]  = { path.join(directory, "natvis", "**") },
     }
 
@@ -118,10 +120,25 @@ function AddDepsApplication (params, toProcess)
             -- Process externals
             dofile (path.join(ROOT_DIR, v, "scripts", "externals.lua"))
 
-            -- Recurse through
+            -- Recurse through @@BILL At some point this will need to append
+            -- unique entries to the list and *then* sort based on weights
+            -- to ensure proper link order
             dofile (path.join(ROOT_DIR, v, "scripts", "deps.lua"))
         end
     end
+end
+
+local _GROUP_STACK = {}
+function PushGroup (name)
+    table.insert(_GROUP_STACK, name)
+    local fullName = table.concat(_GROUP_STACK, "/")
+    group(fullName)
+end
+
+function PopGroup ()
+    table.remove(_GROUP_STACK, #_GROUP_STACK)
+    local fullName = table.concat(_GROUP_STACK, "/")
+    group(fullName)
 end
 
 function LightStaticLib (name, directory)

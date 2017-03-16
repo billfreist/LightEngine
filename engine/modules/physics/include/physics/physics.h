@@ -26,12 +26,14 @@ protected:
     Shape (ShapeType type) : type(type) { }
 };
 
-struct SphereShape {
+struct SphereShape : Shape {
     ///
     Vec3f localPos;
 
     ///
     float radius;
+
+    SphereShape () : Shape(ShapeType::kSphere) { }
 };
 
 

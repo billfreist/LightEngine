@@ -1,4 +1,6 @@
 
 -- Process individual module project scripts
-dofile "core.lua"
-dofile "tests.lua"
+PushGroup("core")
+    dofile "core.lua"
+    dofile "tests.lua"
+PopGroup()

@@ -12,9 +12,13 @@ function AddCompatIncludes ()
     configuration { }
 end
 
--- Process individual module project scripts
-dofile "graphics.lua"
-dofile "tests.lua"
+PushGroup("graphics")
+    -- Process individual module project scripts
+    dofile "graphics.lua"
+    dofile "tests.lua"
 
--- Process external projects
-dofile "bgfx.lua"
+    -- Process external projects
+    PushGroup("external")
+        dofile "bgfx.lua"
+    PopGroup()
+PopGroup()
