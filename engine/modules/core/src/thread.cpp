@@ -2,9 +2,27 @@
 /// LICENSE
 ///
 
-#include "core_pch.h"
+#include "pch.h"
 
 LITE_NAMESPACE_BEGIN(lite)
+
+// Thread
+Thread::Thread (uint32_t stackSize, const char * name) {
+    LITE_REF(stackSize, name);
+}
+
+Thread::~Thread () {
+    WaitForExit();
+}
+
+bool Thread::WaitForExit () {
+    if (!m_thr.joinable())
+        return false;
+
+    m_thr.join();
+    return true;
+}
+
 
 // Exported
 uint32_t ThreadGetCoreCount () {

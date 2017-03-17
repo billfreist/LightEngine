@@ -2,7 +2,7 @@
 /// LICENSE
 ///
 
-#include "core_tests_pch.h"
+#include "pch.h"
 
 int main () {
     lite::TestAlloc();

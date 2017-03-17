@@ -53,7 +53,7 @@ struct RigidBodyParams {
     Shape * shape = nullptr;
 
     ///
-    Transform transform = { Identity::kTag };
+    Transform transform = { tag::Identity{} };
 
     ///
     Vec3f scale = { 0.0f, 0.0f, 0.0f };

@@ -65,8 +65,8 @@ configuration {}
 
 -- Common project configurations
 local function _CommonProjectConfig (name, directory)
-    pchheader (name .. "_pch.h")
-    pchsource (path.join(directory, "src", name .. "_pch.cpp"))
+    pchheader ("pch.h")
+    pchsource (path.join(directory, "src", "pch.cpp"))
 
     includedirs {
         path.join(directory, "include"),
@@ -161,6 +161,22 @@ function LightConsoleApp (name, directory)
     project (name)
         uuid (os.uuid(name))
         kind "ConsoleApp"
+
+        _CommonProjectConfig(name, directory)
+
+        -- Process deps
+        DEPS_PARAMS = {
+            Callback = AddDepsApplication,
+            Finished = {}
+        }
+        dofile (path.join(ROOT_DIR, directory, "scripts", "deps.lua"))
+        DEPS_PARAMS = nil
+end
+
+function LightWindowedApp (name, directory)
+    project (name)
+        uuid (os.uuid(name))
+        kind "WindowedApp"
 
         _CommonProjectConfig(name, directory)
 

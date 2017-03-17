@@ -26,6 +26,10 @@ struct Type2 {
         "Type must be integral or floating point"
     );
 
+    Type2 () = default;
+    Type2 (tag::Uninitialized) { }
+    Type2 (T x, T y) : x(x), y(y) { }
+
     T x, y;
 };
 using Vec2i = Type2<int32_t>;
@@ -162,6 +166,10 @@ public:
     void Push (const T & data) { std::vector<T>::push_back(data); }
     T    Pop ()                { T tmp(std::move(std::vector<T>::back())); std::vector<T>::pop_back(); return tmp; }
 
+    T * Add (T && v)                    { std::vector<T>::push_back(std::forward<T>(v)); }
+    void RemoveOrdered (const T * ptr)  { std::vector<T>::erase(std::vector<T>::begin() + (ptr - Ptr())); }
+    void RemoveOrdered (uint32_t index) { std::vector<T>::erase(std::vector<T>::begin() + index); }
+
     void     Clear ()       { std::vector<T>::clear(); }
     void     Reset ()       { std::vector<T>::clear(); }
 
@@ -171,8 +179,8 @@ public:
     uint32_t GetCapacity () const            { return uint32_t(std::vector<T>::capacity()); }
     void     SetCapacity (uint32_t capacity) { std::vector<T>::reserve(capacity); }
 
-    T & operator[] (uint32_t i)             { return std::vector<T>::[i]; }
-    const T & operator[] (uint32_t i) const { return std::vector<T>::[i]; }
+    T & operator[] (uint32_t i)             { return std::vector<T>::at(i); }
+    const T & operator[] (uint32_t i) const { return std::vector<T>::at(i); }
 
     /// Mutable iterating
     using Iterator      = T *;
@@ -231,10 +239,10 @@ void ExplicitConstructor<T>::Destroy () {
 #define LITE_DEFINE_ENUM_BIT_OPERATORS(e)                                                                                  \
     static_assert(std::is_enum<e>::value, LITE_STRINGIFY(e) " must be an enum to add bit operators!");                     \
     static_assert(std::is_unsigned<typename std::underlying_type<e>::type>::value, LITE_STRINGIFY(e) " must be unsigned"); \
-    e operator~ (e val) { return e(~std::underlying_type_t<e>(val)); }                                                     \
-    e operator& (e lhs, e rhs) { return e(std::underlying_type_t<e>(lhs) & std::underlying_type_t<e>(rhs)); }              \
-    e operator| (e lhs, e rhs) { return e(std::underlying_type_t<e>(lhs) | std::underlying_type_t<e>(rhs)); }              \
-    e operator^ (e lhs, e rhs) { return e(std::underlying_type_t<e>(lhs) ^ std::underlying_type_t<e>(rhs)); }
+    inline e operator~ (e val) { return e(~std::underlying_type_t<e>(val)); }                                              \
+    inline e operator& (e lhs, e rhs) { return e(std::underlying_type_t<e>(lhs) & std::underlying_type_t<e>(rhs)); }       \
+    inline e operator| (e lhs, e rhs) { return e(std::underlying_type_t<e>(lhs) | std::underlying_type_t<e>(rhs)); }       \
+    inline e operator^ (e lhs, e rhs) { return e(std::underlying_type_t<e>(lhs) ^ std::underlying_type_t<e>(rhs)); }
 
 
 // Flags

@@ -2,7 +2,7 @@
 /// LICENSE
 ///
 
-#include "core_pch.h"
+#include "pch.h"
 #define MINIZ_HEADER_FILE_ONLY
 #include <compress/miniz.h>
 #include "miniz/miniz.c"

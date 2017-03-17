@@ -2,7 +2,7 @@
 /// LICENSE
 ///
 
-#include "graphics_pch.h"
+#include "pch.h"
 
 #include <bx/allocator.h>
 #include <common/debugdraw/debugdraw.h>

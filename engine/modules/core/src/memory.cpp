@@ -2,7 +2,7 @@
 /// LICENSE
 ///
 
-#include "core_pch.h"
+#include "pch.h"
 
 LITE_NAMESPACE_BEGIN(lite)
 

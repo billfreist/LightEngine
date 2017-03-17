@@ -4,18 +4,36 @@
 
 #pragma once
 
+#include <functional>
+
 LITE_NAMESPACE_BEGIN(lite)
 
 // Thread
-typedef std::thread Thread;
+class Thread : std::thread {
+public:
+
+    Thread (uint32_t stackSize, const char * name);
+    ~Thread ();
+
+    bool WaitForExit ();
+
+    template<class Func, typename... Args>
+    void Launch (Func && func, Args&&... args) {
+        m_thr = std::thread { std::forward<Func>(func), std::forward<Args>(args)... };
+    }
+
+private:
+
+    std::thread m_thr;
+};
 
 // Lock
 class Lock final : std::mutex {
 public:
 
-    void Enter () { std::mutex::lock(); }
+    void Enter ()    { std::mutex::lock(); }
     bool TryEnter () { std::mutex::try_lock(); }
-    void Leave () { std::mutex::unlock(); }
+    void Leave ()    { std::mutex::unlock(); }
 };
 
 // Exported
