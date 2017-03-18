@@ -1,2 +1,3 @@
 
-LightConsoleApp("example_framework_tests", path.getabsolute("../tests"))
+local PROJ_DIR = path.getabsolute("../tests")
+LightTestApp("example_framework_tests", PROJ_DIR)

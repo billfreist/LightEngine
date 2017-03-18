@@ -9,6 +9,7 @@ LITE_NAMESPACE_BEGIN(lite, platform)
 
 LITE_NAMESPACE_END(lite, platform)
 
-int main () {
-    return 0;
+int LiteMain (int argc, char ** argsv) {
+    testing::InitGoogleTest(&argc, argsv);
+    return RUN_ALL_TESTS();
 }

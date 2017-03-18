@@ -21,6 +21,14 @@
 #endif
 
 
+// Force inline
+#if LITE_OS_WINDOWS
+#   define LITE_FORCE_INLINE __forceinline
+#else
+#   define LITE_FORCE_INLINE __attribute__((always_inline))
+#endif
+
+
 // Assert
 #if LITE_OS_WINDOWS
 #   include <assert.h>

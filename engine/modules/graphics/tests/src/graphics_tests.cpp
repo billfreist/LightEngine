@@ -6,14 +6,14 @@
 
 LITE_NAMESPACE_BEGIN(lite, graphics)
 
-void InitTest () {
+TEST(Graphics, Init) {
     graphics::Scene scene;
     scene.Render();
 }
 
 LITE_NAMESPACE_END(lite, graphics)
 
-int main () {
-    lite::graphics::InitTest();
-    return 0;
+int LiteMain (int argc, char ** argsv) {
+    testing::InitGoogleTest(&argc, argsv);
+    return RUN_ALL_TESTS();
 }

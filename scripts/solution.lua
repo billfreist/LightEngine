@@ -12,6 +12,7 @@ solution "light_engine"
 
     -- Framework
     dofile "../engine/modules/example_framework/scripts/projects.lua"
+    dofile "../engine/modules/test_framework/scripts/projects.lua"
 
     -- Engine
     dofile "../engine/modules/graphics/scripts/projects.lua"

@@ -48,6 +48,7 @@ configuration { "Release" }
 configuration { "vs*", "x32 or x64" }
     buildoptions {
         "/wd4324", -- warning C4324: structure was padded due to alignment specifier
+        "/wd4595", -- warning C4595: 'operator new': non-member operator new or delete functions may not be declared inline
     }
 
 configuration { "x64" }
@@ -187,4 +188,12 @@ function LightWindowedApp (name, directory)
         }
         dofile (path.join(ROOT_DIR, directory, "scripts", "deps.lua"))
         DEPS_PARAMS = nil
+end
+
+function LightTestApp (name, directory)
+    LightConsoleApp(name, directory)
+        local GTEST_INCLUDE = path.join(ROOT_DIR, "../googletest/googletest/include")
+        includedirs {
+            GTEST_INCLUDE,
+        }
 end
