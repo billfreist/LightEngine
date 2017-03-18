@@ -9,8 +9,8 @@
 
 LITE_NAMESPACE_BEGIN(lite)
 
-const int MEM_LEVEL   = 9;
-const int WINDOW_BITS = MZ_DEFAULT_WINDOW_BITS;
+constexpr int kMemLevel   = INT32_C(9);
+constexpr int kWindowBits = INT32_C(MZ_DEFAULT_WINDOW_BITS);
 
 
 inline static void * MiniZAlloc (void * /*opaque*/, size_t items, size_t size) {
@@ -22,7 +22,7 @@ inline static void MiniZFree (void * /*opaque*/, void * address) {
 }
 
 
-MiniZCompressor::MiniZCompressor (ECompressionLevel level)
+MiniZCompressor::MiniZCompressor (CompressionLevel level)
     : m_compressionLevel(level)
 {
 
@@ -134,8 +134,8 @@ void MiniZCompressor::InitCompressContext () {
             context,
             int(m_compressionLevel),
             MZ_DEFLATED,
-            WINDOW_BITS,
-            MEM_LEVEL,
+            kWindowBits,
+            kMemLevel,
             MZ_FILTERED
         );
         m_compressContext = context;
@@ -150,7 +150,7 @@ void MiniZCompressor::InitDecompressContext () {
         context->zfree  = &MiniZFree;
         m_decompressContext = context;
     }
-    mz_inflateInit2(static_cast<mz_streamp>(m_decompressContext), WINDOW_BITS);
+    mz_inflateInit2(static_cast<mz_streamp>(m_decompressContext), kWindowBits);
 }
 
 LITE_NAMESPACE_END(lite)

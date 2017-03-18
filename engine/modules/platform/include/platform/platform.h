@@ -4,7 +4,12 @@
 
 #pragma once
 
+#include <core/ptr.h>
+
 LITE_NAMESPACE_BEGIN(lite, platform)
+
+class Window;
+using WindowPtr = SharedPtr<Window>;
 
 class Application {
 public:
@@ -18,7 +23,7 @@ public:
     virtual ~Application () { }
 
     ///
-    virtual class Window * CreateWindow () = 0;
+    virtual WindowPtr CreateWindow () = 0;
 
 protected:
 
@@ -34,6 +39,9 @@ protected:
 class Window {
 public:
 
+    ///
+    virtual bool IsClosed () const = 0;
+
     /// Close the window by posting the relevant message to it. This object will be deleted.
     virtual void Close () = 0;
 
@@ -46,6 +54,10 @@ public:
 protected:
 
     virtual ~Window () { }
+
+    friend class SharedPtr<Window>;
+    friend class std::_Ref_count<Window>;
+    friend class std::shared_ptr<Window>;
 };
 
 

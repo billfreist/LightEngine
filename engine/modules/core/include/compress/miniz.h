@@ -9,7 +9,7 @@ LITE_NAMESPACE_BEGIN(lite)
 class MiniZCompressor {
 public:
 
-    enum ECompressionLevel {
+    enum CompressionLevel {
         COMPRESSION_LEVEL_NONE       = 0,
         COMPRESSION_LEVEL_SUPER_FAST = 1,
         COMPRESSION_LEVEL_VERY_FAST  = 2,
@@ -23,8 +23,8 @@ public:
         COMPRESSION_LEVEL_UBER       = 10,
     };
 
-    MiniZCompressor () { }
-    MiniZCompressor (ECompressionLevel level);
+    MiniZCompressor () = default;
+    MiniZCompressor (CompressionLevel level);
     ~MiniZCompressor ();
 
     // Naive implementation - for one-off use cases.
@@ -40,9 +40,9 @@ private:
     void InitCompressContext ();
     void InitDecompressContext ();
 
-    void *             m_compressContext   = nullptr;
-    void *             m_decompressContext = nullptr;
-    ECompressionLevel  m_compressionLevel  = COMPRESSION_LEVEL_NORMAL;
+    void *           m_compressContext   = nullptr;
+    void *           m_decompressContext = nullptr;
+    CompressionLevel m_compressionLevel  = COMPRESSION_LEVEL_NORMAL;
 
 };
 

@@ -33,7 +33,7 @@ public:
 
 public:
 
-    Window * CreateWindow () override;
+    WindowPtr CreateWindow () override;
 
 private:
 
@@ -51,11 +51,11 @@ private:
     bool m_exit = false;
 
     struct WindowMapping {
-        HWND            hwnd;
-        WindowsWindow * window;
+        HWND      hwnd;
+        WindowPtr window;
 
         bool operator== (const HWND & rhs) const          { return hwnd == rhs; }
-        bool operator== (const WindowsWindow * rhs) const { return window == rhs; }
+        bool operator== (const WindowsWindow * rhs) const { return window.Get() == rhs; }
     };
     Array<WindowMapping> m_windows;
 };
@@ -96,6 +96,7 @@ int WindowsApplication::Run (int argc, char ** argsv) {
         720,  // nHeight
         nullptr, // hWndParent
         nullptr, // hMenu
+        // Now process messages
         instance,
         0     // lpParam
     );
@@ -108,7 +109,6 @@ int WindowsApplication::Run (int argc, char ** argsv) {
         // Wait for input idle for ~16ms, which roughly equates to 60fps
         WaitForInputIdle(GetCurrentProcess(), 16);
 
-        // Now process messages
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -122,8 +122,10 @@ int WindowsApplication::Run (int argc, char ** argsv) {
     return m_exitCode;
 }
 
-Window * WindowsApplication::CreateWindow () {
-    return LITE_NEW(WindowsWindow);
+WindowPtr WindowsApplication::CreateWindow () {
+    WindowsWindow * win = LITE_NEW(WindowsWindow)(m_hwnd);
+    auto * entry = m_windows.Add({ m_hwnd, WindowPtr(win, tag::RawPtr{}) });
+    return entry->window;
 }
 
 void WindowsApplication::DestroyWindow (WindowsWindow * window) {
@@ -132,16 +134,16 @@ void WindowsApplication::DestroyWindow (WindowsWindow * window) {
 
     auto * mapping = std::find(m_windows.begin(), m_windows.end(), window);
     LITE_ASSERT(mapping != m_windows.end());
+    window->Close();
     m_windows.RemoveOrdered(mapping);
-    LITE_DEL(window);
 }
 
 WindowsWindow * WindowsApplication::FindWindow (HWND hwnd) {
-    const auto * mapping = std::find(m_windows.begin(), m_windows.end(), hwnd);
+    auto * mapping = std::find(m_windows.begin(), m_windows.end(), hwnd);
     if (mapping == m_windows.end())
         return nullptr;
 
-    return mapping->window;
+    return static_cast<WindowsWindow *>(mapping->window.Get());
 }
 
 LRESULT CALLBACK WindowsApplication::HwndProc (HWND hwnd, UINT id, WPARAM wparam, LPARAM lparam) {

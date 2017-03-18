@@ -7,9 +7,13 @@
 LITE_NAMESPACE_BEGIN(lite, platform)
 
 void TestCreateWindow () {
-    Window * window = Application::Get()->CreateWindow();
+    WindowPtr window = Application::Get()->CreateWindow();
     LITE_ASSERT(window);
-    window->Close();
+    for (;;) {
+        ThreadSleep(16);
+        if (window->IsClosed())
+            break;
+    }
 }
 
 LITE_NAMESPACE_END(lite, platform)
