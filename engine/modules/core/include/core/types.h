@@ -50,7 +50,16 @@ struct Type3 {
 
     Type3 () = default;
     Type3 (tag::Uninitialized) { }
+    Type3 (T all) : x(all), y(all), z(all) { }
     Type3 (T x, T y, T z) : x(x), y(y), z(z) { }
+
+    bool operator== (const Type3 & rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
+    bool operator!= (const Type3 & rhs) const { return !(*this == rhs); }
+
+    Type3 operator+ (const Type3 & rhs) const { return Type3(x + rhs.x, y + rhs.y, z + rhs.z); }
+    Type3 operator- (const Type3 & rhs) const { return Type3(x - rhs.x, y - rhs.y, z - rhs.z); }
+    Type3 operator* (const Type3 & rhs) const { return Type3(x * rhs.x, y * rhs.y, z * rhs.z); }
+    Type3 operator/ (const Type3 & rhs) const { return Type3(x / rhs.x, y / rhs.y, z / rhs.z); }
 
     T x, y, z;
 };

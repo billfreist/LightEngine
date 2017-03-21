@@ -26,4 +26,13 @@ TEST(Allocator, New_Mixed) {
     delete ptr;
 }
 
+TEST(Allocator, Cmp) {
+    uint32_t * ptr = LITE_STACK_ALLOC(uint32_t, 1);
+    MemZero(ptr, sizeof(*ptr));
+    LITE_ASSERT(MemIsZero(ptr, sizeof(*ptr)));
+    MemSet(ptr, sizeof(*ptr), 0xFF);
+    uint32_t cmp = 0xFFFFFFFF;
+    LITE_ASSERT(MemCmp(ptr, &cmp, sizeof(*ptr)) == 0);
+}
+
 LITE_NAMESPACE_END(lite)
