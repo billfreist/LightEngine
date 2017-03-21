@@ -19,8 +19,8 @@ public:
 
 public:
 
-    Application () { }
-    virtual ~Application () { }
+    Application () = default;
+    virtual ~Application () = default;
 
     ///
     virtual WindowPtr CreateWindow () = 0;
