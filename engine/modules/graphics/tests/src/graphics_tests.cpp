@@ -7,7 +7,7 @@
 LITE_NAMESPACE_BEGIN(lite, graphics)
 
 TEST(Graphics, Init) {
-    graphics::Scene scene;
+    graphics::Scene scene({});
     scene.Render();
 }
 

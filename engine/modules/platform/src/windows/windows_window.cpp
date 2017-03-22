@@ -30,6 +30,10 @@ void WindowsWindow::Close () {
     m_hwnd = kClosedHwnd;
 }
 
+void * WindowsWindow::GetHandle () const {
+    return (void *)m_hwnd;
+}
+
 void WindowsWindow::GetKeyboardState (KeyboardState * state) {
     LITE_REF(state);
 }

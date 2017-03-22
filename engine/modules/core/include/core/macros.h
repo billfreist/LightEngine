@@ -44,13 +44,7 @@ constexpr uint32_t lite_ArraySizeImpl (const T (&)[N]) { return N; }
 
 // Ref
 template<typename...Args>
-inline void lite_RefImpl (const Args&... args) {
-    for (;;) {
-        if (::lite::IsEnabled<true>())
-            break;
-        lite_RefImpl(args...);
-    }
-}
+inline void lite_RefImpl (Args&&...) { }
 #define LITE_REF(...) lite_RefImpl(__VA_ARGS__)
 
 // Alignment
@@ -96,6 +90,8 @@ inline void lite_RefImpl (const Args&... args) {
 //
 #define LITE_NAMESPACE_BEGIN(...) LITE_MACRO_DISPATCH(_LITE_NAMESPACE_BEGIN_, __VA_ARGS__) LITE_ARGS_FROWARD(__VA_ARGS__)
 #define LITE_NAMESPACE_END(...)   LITE_MACRO_DISPATCH(_LITE_NAMESPACE_END_, __VA_ARGS__) LITE_ARGS_FROWARD(__VA_ARGS__)
+#define LITE_NAMESPACE_ANONYMOUS
+
 
 #define _LITE_NAMESPACE_BEGIN_1(a1)                     namespace a1 {
 #define _LITE_NAMESPACE_BEGIN_2(a1, a2)                 _LITE_NAMESPACE_BEGIN_1(a1)                 _LITE_NAMESPACE_BEGIN_1(a2)

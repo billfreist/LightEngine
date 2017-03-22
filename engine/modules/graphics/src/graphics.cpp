@@ -5,7 +5,9 @@
 #include "pch.h"
 
 #include <bx/allocator.h>
+#include <bx/fpumath.h>
 #include <common/debugdraw/debugdraw.h>
+#include <bgfx/platform.h>
 
 LITE_NAMESPACE_BEGIN(lite, graphics)
 
@@ -51,7 +53,7 @@ static BgfxAllocator s_allocator;
 class RenderContext {
 public:
 
-    RenderContext ();
+    RenderContext (const bgfx::PlatformData & data);
     ~RenderContext ();
 
     View AllocView () { return m_viewPool++; }
@@ -62,9 +64,10 @@ private:
 };
 static ExplicitConstructor<RenderContext> s_context;
 
-RenderContext::RenderContext () {
+RenderContext::RenderContext (const bgfx::PlatformData & data) {
+    bgfx::setPlatformData(data);
     const bool initialized = bgfx::init(
-        bgfx::RendererType::Noop,
+        data.nwh ? bgfx::RendererType::Count : bgfx::RendererType::Noop,
         BGFX_PCI_ID_NONE,
         0, // deviceId
         nullptr,
@@ -75,6 +78,9 @@ RenderContext::RenderContext () {
 
     // Initialize debug draw
     ddInit(true, &s_allocator);
+
+    // Initialize debugging
+    bgfx::setDebug(BGFX_DEBUG_TEXT);
 }
 
 RenderContext::~RenderContext () {
@@ -93,22 +99,28 @@ RenderContext::~RenderContext () {
 ///////////////////////////////////////////////////////////
 
 class DebugDraw : public IDebugDrawer {
+public:
+
+    void SetView (View view) { m_view = view; }
+
 public: // IDebugDrawer
 
-    void Begin (uint8_t view) override;
+    void Begin () override;
     void End () override;
 
     void MoveTo (const Vec3f & pos) override;
     void LineTo (const Vec3f & pos) override;
     void Close () override;
 
-    void DrawSphere (const Vec3f & center, float radius) override;
     void DrawSphere (const Sphere & sphere) override;
-};
-static DebugDraw s_debugDraw;
 
-void DebugDraw::Begin (uint8_t view) {
-    ddBegin(view);
+private:
+
+    View m_view = 0;
+};
+
+void DebugDraw::Begin () {
+    ddBegin(m_view);
 }
 
 void DebugDraw::End () {
@@ -127,14 +139,8 @@ void DebugDraw::Close () {
     ddClose();
 }
 
-void DebugDraw::DrawSphere (const Vec3f & center, float radius) {
-    ::Sphere _sphere;
-    MemCopy(&_sphere.m_center, &center, sizeof(center));
-    _sphere.m_radius = radius;
-    ddDraw(_sphere);
-}
-
 void DebugDraw::DrawSphere (const Sphere & sphere) {
+    LITE_REF(sphere);
     ::Sphere _sphere;
     MemCopy(&_sphere.m_center, &sphere.center, sizeof(sphere.center));
     _sphere.m_radius = sphere.radius;
@@ -150,32 +156,57 @@ void DebugDraw::DrawSphere (const Sphere & sphere) {
 
 static uint32_t s_sceneCount = 0;
 
-Scene::Scene () {
-    if (!s_sceneCount++)
-        s_context.Init();
+Scene::Scene (const Params & params) : m_params(params) {
+    if (!s_sceneCount++) {
+        bgfx::PlatformData platformData;
+        MemZero(&platformData, sizeof(platformData));
+        platformData.nwh = m_params.windowHandle;
+        s_context.Init(platformData);
+    }
     m_view = s_context->AllocView();
+    m_frameBuffer = bgfx::createFrameBuffer(m_params.windowHandle, 1280, 720).idx;
     bgfx::resetView(m_view);
 }
 
 Scene::~Scene () {
+    bgfx::destroyFrameBuffer(bgfx::FrameBufferHandle{ m_frameBuffer });
     if (!--s_sceneCount)
         s_context.Destroy();
 }
 
 void Scene::Render () {
-    bgfx::setViewClear(m_view, BGFX_CLEAR_NONE);
+    // Ensure we are rendering to our current window
+    bgfx::PlatformData platformData;
+    MemZero(&platformData, sizeof(platformData));
+    platformData.nwh = m_params.windowHandle;
+    bgfx::setPlatformData(platformData);
 
+    // Clear the view
+    bgfx::setViewClear(m_view, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030FF);
+
+    // Ensure the view clears
+    bgfx::touch(m_view);
+
+    // Now advance the frame
     bgfx::frame();
 }
 
-
-///////////////////////////////////////////////////////////
-//
-//    Exported
-//
-///////////////////////////////////////////////////////////
-
-IDebugDrawer * GetDebugDrawer () {
+IDebugDrawer * Scene::GetDebugDrawer () {
+    static DebugDraw s_debugDraw;
+    s_debugDraw.SetView(m_view);
     return &s_debugDraw;
 }
+
+void Scene::SetCamera (const Vec3f & eye, const Vec3f & target) {
+    bgfx::setViewRect(m_view, 0, 0, 1280, 720);
+
+    float viewMtx[16];
+    bx::mtxLookAt(viewMtx, &eye.x, &target.x);
+
+    float projMtx[16];
+    bx::mtxProj(projMtx, 45.0f, 1280.0f / 720.0f, 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
+
+    bgfx::setViewTransform(m_view, viewMtx, projMtx);
+}
+
 LITE_NAMESPACE_END(lite, graphics)

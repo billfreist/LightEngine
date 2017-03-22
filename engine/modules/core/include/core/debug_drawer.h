@@ -17,7 +17,7 @@ LITE_NAMESPACE_BEGIN(lite)
 interface IDebugDrawer {
 
     ///
-    virtual void Begin (uint8_t view) = 0;
+    virtual void Begin () = 0;
     virtual void End () = 0;
 
     ///
@@ -26,8 +26,7 @@ interface IDebugDrawer {
     virtual void Close () = 0;
 
     ///
-    virtual void DrawSphere (const Vec3f & center, float radius) = 0;
-    virtual void DrawSphere (const Sphere & sphere) = 0;
+    virtual void DrawSphere (const lite::Sphere & sphere) = 0;
 };
 
 LITE_NAMESPACE_END(lite)

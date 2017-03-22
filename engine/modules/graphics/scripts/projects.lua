@@ -15,6 +15,7 @@ end
 PushGroup("graphics")
     -- Process individual module project scripts
     dofile "graphics.lua"
+    dofile "examples.lua"
     dofile "tests.lua"
 
     -- Process external projects

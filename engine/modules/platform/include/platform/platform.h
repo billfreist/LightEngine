@@ -45,6 +45,9 @@ public:
     /// Close the window by posting the relevant message to it. This object will be deleted.
     virtual void Close () = 0;
 
+    ///
+    virtual void * GetHandle () const = 0;
+
     /// Grab the current snapshot of the keyboard state
     virtual void GetKeyboardState (struct KeyboardState * state) = 0;
 

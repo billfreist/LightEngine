@@ -51,6 +51,11 @@ configuration { "vs*", "x32 or x64" }
         "/wd4595", -- warning C4595: 'operator new': non-member operator new or delete functions may not be declared inline
     }
 
+configuration { "vs*", "x32 or x64", "Release" }
+    buildoptions {
+        "/wd4189", -- warning C4324: local variable is initialized but not referenced
+    }
+
 configuration { "x64" }
     location  (path.join(ROOT_DIR, ".build", "projects", "windows", _ACTION, "x64"))
 

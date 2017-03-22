@@ -106,6 +106,19 @@ using Box6f = Type6<float>;
 using Box6d = Type6<double>;
 
 
+template<typename T>
+struct Color4 {
+    static_assert(
+        std::is_integral<T>::value || std::is_floating_point<T>::value,
+        "Type must be integral or floating point"
+    );
+
+    T r, g, b, a;
+};
+using Color4b = Color4<uint8_t>;
+using Color4f = Color4<float>;
+
+
 // Quaternion
 class Quaternion {
 public:
@@ -210,7 +223,8 @@ public:
 
     ~ExplicitConstructor ();
 
-    void Init ();
+    template<typename... Args>
+    void Init (Args&&... args);
     void Destroy ();
 
     T * Get ()        { return reinterpret_cast<T *>(&m_mem); }
@@ -231,10 +245,11 @@ ExplicitConstructor<T>::~ExplicitConstructor () {
 }
 
 template<class T>
-void ExplicitConstructor<T>::Init () {
+template<typename... Args>
+void ExplicitConstructor<T>::Init (Args&&... args) {
     LITE_ASSERT(!m_isInit);
     m_isInit = true;
-    new(&m_mem) T;
+    new(&m_mem) T(std::forward<Args>(args)...);
 }
 
 template<class T>

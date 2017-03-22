@@ -1,8 +1,7 @@
 
 -- Modules
 local DEPS = {
-    "engine/modules/platform",
     "engine/modules/graphics",
-    "engine/modules/core",
+    "engine/modules/example_framework",
 }
 DEPS_PARAMS.Callback(DEPS_PARAMS, DEPS)

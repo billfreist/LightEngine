@@ -26,23 +26,28 @@ using View = uint8_t;
 class Scene {
 public:
 
-    Scene ();
+    struct Params {
+        ///
+        void * windowHandle = nullptr;
+    };
+
+    Scene (const Params & params);
     ~Scene ();
 
+    ///
     void Render ();
+
+    ///
+    IDebugDrawer * GetDebugDrawer ();
+
+    ///
+    void SetCamera (const Vec3f & eye, const Vec3f & target);
 
 private:
 
-    View m_view;
+    const Params m_params;
+    uint16_t     m_frameBuffer;
+    View         m_view;
 };
-
-
-///////////////////////////////////////////////////////////
-//
-//    Exported
-//
-///////////////////////////////////////////////////////////
-
-IDebugDrawer * GetDebugDrawer ();
 
 LITE_NAMESPACE_END(lite, graphics)
