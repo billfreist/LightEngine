@@ -26,7 +26,7 @@ interface IDebugDrawer {
     virtual void Close () = 0;
 
     ///
-    virtual void DrawSphere (const lite::Sphere & sphere) = 0;
+    virtual void DrawSphere (const Sphere & sphere) = 0;
 };
 
 LITE_NAMESPACE_END(lite)

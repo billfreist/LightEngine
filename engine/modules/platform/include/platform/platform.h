@@ -64,7 +64,7 @@ protected:
 };
 
 
-enum class Key : int32_t {
+enum class Key : uint8_t {
     kUp,
     kDown,
     kLeft,
@@ -78,6 +78,7 @@ enum class Key : int32_t {
     kPageDown,
     kHome,
     kEnd,
+    kInsert,
     kDelete,
 
     kLCtrl,
