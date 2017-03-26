@@ -34,7 +34,19 @@ public:
     void Enter ()    { std::mutex::lock(); }
     bool TryEnter () { std::mutex::try_lock(); }
     void Leave ()    { std::mutex::unlock(); }
+
+public:
+
+    class Scope {
+    public:
+        Scope (Lock & lock) : m_lock(&lock) { m_lock->Enter(); }
+        Scope (Lock * lock) : m_lock(lock)  { m_lock->Enter(); }
+        ~Scope ()                           { m_lock->Leave(); }
+    private:
+        Lock * m_lock;
+    };
 };
+#define LITE_SCOPED_LOCK(lock) Lock::Scope LITE_CONCAT(_scopedLock, __LINE__)(lock)
 
 // Exported
 uint32_t ThreadGetCoreCount ();

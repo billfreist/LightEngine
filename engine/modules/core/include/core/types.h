@@ -188,6 +188,7 @@ public:
     void Push (const T & data) { std::vector<T>::push_back(data); }
     T    Pop ()                { T tmp(std::move(std::vector<T>::back())); std::vector<T>::pop_back(); return tmp; }
 
+   // T * Add (const T & v)               { std::vector<T>::push_back(v); return &std::vector<T>::back(); }
     T * Add (T && v)                    { std::vector<T>::push_back(std::forward<T>(v)); return &std::vector<T>::back(); }
     void RemoveOrdered (const T * ptr)  { std::vector<T>::erase(std::vector<T>::begin() + (ptr - Ptr())); }
     void RemoveOrdered (uint32_t index) { std::vector<T>::erase(std::vector<T>::begin() + index); }

@@ -33,6 +33,7 @@ public:
 
 public:
 
+    bool      Update () override;
     WindowPtr CreateWindow () override;
 
 private:
@@ -122,6 +123,10 @@ int WindowsApplication::Run (int argc, char ** argsv) {
     return m_exitCode;
 }
 
+bool WindowsApplication::Update () {
+    return Application::Update();
+}
+
 WindowPtr WindowsApplication::CreateWindow () {
     WindowsWindow * win = LITE_NEW(WindowsWindow)(m_hwnd);
     auto * entry = m_windows.Add({ m_hwnd, WindowPtr(win, tag::RawPtr{}) });
@@ -152,8 +157,12 @@ LRESULT CALLBACK WindowsApplication::HwndProc (HWND hwnd, UINT id, WPARAM wparam
     case WM_CLOSE:
     case WM_QUIT: {
         s_app->DestroyWindow(s_app->FindWindow(hwnd));
-        if (s_app->m_hwnd == hwnd)
+        if (s_app->m_hwnd == hwnd) {
+            Message msg;
+            msg.exit = true;
+            s_app->PostMsg(std::move(msg));
             s_app->m_exit = true;
+        }
         return 0;
     }
 

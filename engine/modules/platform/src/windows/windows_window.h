@@ -19,12 +19,12 @@ public: // Window
     bool   IsClosed () const override;
     void   Close () override;
     void * GetHandle () const override;
-    void   GetKeyboardState (KeyboardState * state) override;
-    void   GetMouseState (MouseState * state) override;
 
 private:
 
     HWND m_hwnd;
+
+    KeyboardState m_keyboardState;
 };
 
 LITE_NAMESPACE_END(lite, platform)

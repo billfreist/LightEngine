@@ -11,6 +11,8 @@
 #       define WIN32_LEAN_AND_MEAN
 #   endif
 #   include <windows.h>
-#endif
 
-#include "windows/windows_window.h"
+// Windows impl
+#   include "windows/windows_input.h"
+#   include "windows/windows_window.h"
+#endif

@@ -68,7 +68,8 @@ int ExampleApp::Run (int argc, char ** argsv) {
     LITE_REF(argc, argsv);
 
     // Create the window
-    platform::WindowPtr window = platform::Application::Get()->CreateWindow();
+    platform::Application * app = platform::Application::Get();
+    platform::WindowPtr window = app->CreateWindow();
 
     // Create the render scene, passing the window handle to it for rendering
     graphics::Scene::Params sceneParams;
@@ -81,7 +82,7 @@ int ExampleApp::Run (int argc, char ** argsv) {
     // Render loop
     int returnVal = 0;
     for (;;) {
-        if (window->IsClosed()) {
+        if (app->Update()) {
             break;
         }
 
