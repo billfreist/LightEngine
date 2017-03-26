@@ -56,7 +56,7 @@ struct RigidBodyParams {
     Transform transform = { tag::Identity{} };
 
     ///
-    Vec3f scale = { 0.0f, 0.0f, 0.0f };
+    Vec3f scale = { 1.0f };
 
     ///
     RigidBodyFlags flags;
