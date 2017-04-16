@@ -38,10 +38,12 @@ public:
 
     ///
     LITE_ATOMIC_INTEGRAL_ONLY(T) Increment ();
+    LITE_ATOMIC_INTEGRAL_ONLY(T) IncrementRelease ();
     LITE_ATOMIC_INTEGRAL_ONLY(T) IncrementRelaxed ();
 
     ///
     LITE_ATOMIC_INTEGRAL_ONLY(T) Decrement ();
+    LITE_ATOMIC_INTEGRAL_ONLY(T) DecrementRelease ();
     LITE_ATOMIC_INTEGRAL_ONLY(T) DecrementRelaxed ();
 
     ///

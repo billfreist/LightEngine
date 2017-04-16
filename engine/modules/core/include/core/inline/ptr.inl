@@ -17,7 +17,7 @@ inline RefCounted::~RefCounted () {
 }
 
 inline void RefCounted::IncRef () const {
-    m_refCount.IncrementRelaxed();
+    m_refCount.IncrementRelease();
 }
 
 inline void RefCounted::DecRef () const {

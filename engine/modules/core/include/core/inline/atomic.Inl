@@ -52,6 +52,11 @@ inline LITE_ATOMIC_INTEGRAL_ONLY(T) Atomic<T>::Increment () {
 }
 
 template<typename T>
+inline LITE_ATOMIC_INTEGRAL_ONLY(T) Atomic<T>::IncrementRelease () {
+    return m_val.fetch_add(T(1), std::memory_order_release);
+}
+
+template<typename T>
 inline LITE_ATOMIC_INTEGRAL_ONLY(T) Atomic<T>::IncrementRelaxed () {
     return m_val.fetch_add(T(1), std::memory_order_relaxed);
 }
@@ -59,6 +64,11 @@ inline LITE_ATOMIC_INTEGRAL_ONLY(T) Atomic<T>::IncrementRelaxed () {
 template<typename T>
 inline LITE_ATOMIC_INTEGRAL_ONLY(T) Atomic<T>::Decrement () {
     return m_val.fetch_sub(T(1), std::memory_order_seq_cst);
+}
+
+template<typename T>
+inline LITE_ATOMIC_INTEGRAL_ONLY(T) Atomic<T>::DecrementRelease () {
+    return m_val.fetch_sub(T(1), std::memory_order_release);
 }
 
 template<typename T>
