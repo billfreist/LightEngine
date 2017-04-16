@@ -16,9 +16,12 @@
 
 LITE_NAMESPACE_BEGIN(lite)
 
-///
-/// Vector2 types
-///
+///////////////////////////////////////////////////////////
+//
+//    Type2
+//
+///////////////////////////////////////////////////////////
+
 template<typename T>
 struct Type2 {
     static_assert(
@@ -38,9 +41,12 @@ using Vec2f = Type2<float>;
 using Vec2d = Type2<double>;
 
 
-///
-/// Vector3 types
-///
+///////////////////////////////////////////////////////////
+//
+//    Type3
+//
+///////////////////////////////////////////////////////////
+
 template<typename T>
 struct Type3 {
     static_assert(
@@ -52,6 +58,10 @@ struct Type3 {
     Type3 (tag::Uninitialized) { }
     Type3 (T all) : x(all), y(all), z(all) { }
     Type3 (T x, T y, T z) : x(x), y(y), z(z) { }
+    Type3 (const Type2<T> & type2, T z) : x(type2.x), y(type2.y), z(z) { }
+    Type3 (const Type3<T> & type3) : x(type3.x), y(type3.y), z(type3.z) { }
+
+    Type3 & operator= (const Type3 & type3) { x = type3.x; y = type3.y; z = type3.z; return *this; }
 
     bool operator== (const Type3 & rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
     bool operator!= (const Type3 & rhs) const { return !(*this == rhs); }
@@ -61,6 +71,11 @@ struct Type3 {
     Type3 operator* (const Type3 & rhs) const { return Type3(x * rhs.x, y * rhs.y, z * rhs.z); }
     Type3 operator/ (const Type3 & rhs) const { return Type3(x / rhs.x, y / rhs.y, z / rhs.z); }
 
+    void operator+= (const Type3 & rhs) { *this = *this + rhs; }
+    void operator-= (const Type3 & rhs) { *this = *this - rhs; }
+    void operator*= (const Type3 & rhs) { *this = *this * rhs; }
+    void operator/= (const Type3 & rhs) { *this = *this / rhs; }
+
     T x, y, z;
 };
 using Vec3i = Type3<int32_t>;
@@ -69,15 +84,40 @@ using Vec3f = Type3<float>;
 using Vec3d = Type3<double>;
 
 
-///
-/// Vector4 types
-///
+///////////////////////////////////////////////////////////
+//
+//    Type4
+//
+///////////////////////////////////////////////////////////
+
 template<typename T>
 struct Type4 {
     static_assert(
         std::is_integral<T>::value || std::is_floating_point<T>::value,
         "Type must be integral or floating point"
     );
+
+    Type4 () = default;
+    Type4 (tag::Uninitialized) { }
+    Type4 (T all) : x(all), y(all), z(all), w(all) { }
+    Type4 (T x, T y, T z, T w) : x(x), y(y), z(z), w(w) { }
+    Type4 (const Type3<T> & type3, T w) : x(type3.x), y(type3.y), z(type3.z), w(w) { }
+    Type4 (const Type4<T> & type4) : x(type4.x), y(type4.y), z(type4.z), w(type4.w) { }
+
+    Type4 & operator= (const Type4 & type4) { x = type4.x; y = type4.y; z = type4.z; w = type4.w; return *this; }
+
+    bool operator== (const Type4 & rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w; }
+    bool operator!= (const Type4 & rhs) const { return !(*this == rhs); }
+
+    Type4 operator+ (const Type4 & rhs) const { return Type4(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w); }
+    Type4 operator- (const Type4 & rhs) const { return Type4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w); }
+    Type4 operator* (const Type4 & rhs) const { return Type4(x * rhs.x, y * rhs.y, z * rhs.z, w * rhs.w); }
+    Type4 operator/ (const Type4 & rhs) const { return Type4(x / rhs.x, y / rhs.y, z / rhs.z, w / rhs.w); }
+
+    void operator+= (const Type4 & rhs) { *this = *this + rhs; }
+    void operator-= (const Type4 & rhs) { *this = *this - rhs; }
+    void operator*= (const Type4 & rhs) { *this = *this * rhs; }
+    void operator/= (const Type4 & rhs) { *this = *this / rhs; }
 
     T x, y, z, w;
 };
@@ -87,9 +127,12 @@ using Vec4f = Type4<float>;
 using Vec4d = Type4<double>;
 
 
-///
-/// Vector6 types
-///
+///////////////////////////////////////////////////////////
+//
+//    Type6
+//
+///////////////////////////////////////////////////////////
+
 template<typename T>
 struct Type6 {
     static_assert(
@@ -106,6 +149,12 @@ using Box6f = Type6<float>;
 using Box6d = Type6<double>;
 
 
+///////////////////////////////////////////////////////////
+//
+//    Color4
+//
+///////////////////////////////////////////////////////////
+
 template<typename T>
 struct Color4 {
     static_assert(
@@ -119,7 +168,12 @@ using Color4b = Color4<uint8_t>;
 using Color4f = Color4<float>;
 
 
-// Quaternion
+///////////////////////////////////////////////////////////
+//
+//    Quaternion
+//
+///////////////////////////////////////////////////////////
+
 class Quaternion {
 public:
 
@@ -144,16 +198,46 @@ public:
     Quaternion (const Vec3f & axis, float angle) {
         LITE_REF(axis, angle);
     }
+
+    ///
+    bool IsNormalized () const {
+        const float lenSq =
+            (m_vec.x * m_vec.x) +
+            (m_vec.y * m_vec.y) +
+            (m_vec.z * m_vec.z) +
+            (m_vec.w * m_vec.w);
+        return sqrt(lenSq) < 1.e-5f;
+    }
+    Quaternion & Normalize () {
+        const float lenSq =
+            (m_vec.x * m_vec.x) +
+            (m_vec.y * m_vec.y) +
+            (m_vec.z * m_vec.z) +
+            (m_vec.w * m_vec.w);
+        if (std::isnormal(lenSq)) {
+            const float len = sqrt(lenSq);
+            m_vec /= len;
+        }
+        else {
+            m_vec = { 0.0f, 0.0f, 0.0f, 1.0f };
+        }
+    }
 };
 
 
-// Transform
+///////////////////////////////////////////////////////////
+//
+//    Transform
+//        Rotation, Translation and Uniform Scale
+//
+///////////////////////////////////////////////////////////
+
 class Transform {
 public:
 
     Transform (tag::Identity)
         : m_rotation{ tag::Identity{} }
-        , m_position{ 0.0f, 0.0f, 0.0f }
+        , m_position{ 0.0f, 0.0f, 0.0f, 1.0f }
     {
     }
 
@@ -163,19 +247,53 @@ public:
     {
     }
 
+    /// Initialize with rotation, position and 1.0f scale
     Transform (const Quaternion & rotation, const Vec3f & position)
         : m_rotation(rotation)
-        , m_position(position)
+        , m_position(position, 1.0f)
     {
+    }
+
+    /// Initialize with rotation, position and scale
+    Transform (const Quaternion & rotation, const Vec4f & positionWithScale)
+        : m_rotation(rotation)
+        , m_position(positionWithScale)
+    {
+    }
+
+
+    ///
+    Vec3f GetPosition () const { return Vec3f(m_position.x, m_position.y, m_position.z); }
+    void SetPosition (const Vec3f & translation) {
+        m_position = Vec4f(translation, m_position.w);
+    }
+
+    ///
+    Vec4f GetPositionWithScale () const { return m_position; }
+    void SetPositionWithScale (const Vec4f & translationWithScale) {
+        m_position = translationWithScale;
+    }
+
+    ///
+    Quaternion GetRotation () const { return m_rotation; }
+    void       SetRotation (const Quaternion & rotation) {
+        LITE_ASSERT(rotation.IsNormalized());
+        m_rotation = rotation;
     }
 
 private:
 
     Quaternion m_rotation;
-    Vec3f      m_position;
+    Vec4f      m_position;
 };
 
-// Array
+
+///////////////////////////////////////////////////////////
+//
+//    Array
+//
+///////////////////////////////////////////////////////////
+
 template <typename T>
 class Array : std::vector<T> {
 public:
@@ -217,7 +335,12 @@ public:
 };
 
 
-// ExplicitConstructor
+///////////////////////////////////////////////////////////
+//
+//    ExplicitConstructor
+//
+///////////////////////////////////////////////////////////
+
 template<class T>
 class ExplicitConstructor {
 public:
@@ -261,6 +384,12 @@ void ExplicitConstructor<T>::Destroy () {
 }
 
 
+///////////////////////////////////////////////////////////
+//
+//    Flags
+//
+///////////////////////////////////////////////////////////
+
 #define LITE_DEFINE_ENUM_BIT_OPERATORS(e)                                                                                  \
     static_assert(std::is_enum<e>::value, LITE_STRINGIFY(e) " must be an enum to add bit operators!");                     \
     static_assert(std::is_unsigned<typename std::underlying_type<e>::type>::value, LITE_STRINGIFY(e) " must be unsigned"); \
@@ -269,8 +398,6 @@ void ExplicitConstructor<T>::Destroy () {
     inline e operator| (e lhs, e rhs) { return e(std::underlying_type_t<e>(lhs) | std::underlying_type_t<e>(rhs)); }       \
     inline e operator^ (e lhs, e rhs) { return e(std::underlying_type_t<e>(lhs) ^ std::underlying_type_t<e>(rhs)); }
 
-
-// Flags
 template<class T>
 class Flags {
 public:

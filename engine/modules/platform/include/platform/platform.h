@@ -61,7 +61,7 @@ protected:
 };
 
 
-class Window {
+class Window : public RefCounted {
 public:
 
     ///
@@ -75,11 +75,7 @@ public:
 
 protected:
 
-    virtual ~Window () { }
-
-    friend class SharedPtr<Window>;
-    friend class std::_Ref_count<Window>;
-    friend class std::shared_ptr<Window>;
+    virtual ~Window () = default;
 };
 
 LITE_NAMESPACE_END(lite, platform)

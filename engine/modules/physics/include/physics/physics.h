@@ -15,26 +15,45 @@ LITE_NAMESPACE_BEGIN(lite, physics)
 enum class ShapeType {
     ///
     kSphere,
+
+    ///
+    kGroundPlane,
 };
 
-struct Shape {
+struct Shape : RefCounted {
     ///
     const ShapeType type;
+
+    virtual ~Shape () = default;
 
 protected:
 
     Shape (ShapeType type) : type(type) { }
 };
+using ShapePtr = SharedPtr<const Shape>;
 
-struct SphereShape : Shape {
+///
+struct ShapeSphere final : Shape {
     ///
     Vec3f localPos;
 
     ///
     float radius;
 
-    SphereShape () : Shape(ShapeType::kSphere) { }
+    ShapeSphere () : Shape(ShapeType::kSphere) { }
+
+private:
+    ~ShapeSphere () = default;
 };
+using ShapeSpherePtr = SharedPtr<ShapeSphere>;
+
+///
+struct ShapeGroundPlane final : Shape {
+    ShapeGroundPlane () : Shape(ShapeType::kGroundPlane) { }
+private:
+    ~ShapeGroundPlane () = default;
+};
+using ShapeGroundPlanePtr = SharedPtr<const ShapeGroundPlane>;
 
 
 ///////////////////////////////////////////////////////////
@@ -50,7 +69,7 @@ using RigidBodyFlags = Flags<RigidBodyFlag>;
 
 struct RigidBodyParams {
     ///
-    Shape * shape = nullptr;
+    ShapePtr shape;
 
     ///
     Transform transform = { tag::Identity{} };
@@ -63,12 +82,15 @@ struct RigidBodyParams {
 };
 
 class RigidBody {
+    LITE_DECLARE_NOCOPY(RigidBody);
 public:
 
     RigidBody (const RigidBodyParams & params);
+    ~RigidBody ();
 
 private:
 
+    ShapePtr       m_shape;
     RigidBodyFlags m_flags;
 };
 
@@ -87,9 +109,14 @@ struct WorldParams {
 };
 
 class World {
+    LITE_DECLARE_NOCOPY(World);
 public:
 
     World (const WorldParams & params);
+
+    ///
+    RigidBody * CreateRigidBody (const RigidBodyParams & params);
+    void        DestroyRigidBody (RigidBody * ptr);
 
 private:
 

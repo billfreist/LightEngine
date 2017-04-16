@@ -11,7 +11,7 @@ project "google_test"
 
     excludes {
         path.join(GTEST_DIR, "src", "gtest-all.cc"),
-        path.join(GTEST_DIR, "src", "gtest-main.cc"),
+        path.join(GTEST_DIR, "src", "gtest_main.cc"),
     }
 
     includedirs {

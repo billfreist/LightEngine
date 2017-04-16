@@ -21,6 +21,16 @@
 #endif
 
 
+// Build Configurations
+#if defined(DEBUG) || defined(_DEBUG)
+#   define LITE_BUILD_DEBUG   1
+#   define LITE_BUILD_RELEASE 0
+#else
+#   define LITE_BUILD_RELEASE 1
+#   define LITE_BUILD_DEBUG   0
+#endif
+
+
 // Force inline
 #if LITE_OS_WINDOWS
 #   define LITE_FORCE_INLINE __forceinline
@@ -56,6 +66,13 @@ inline void lite_RefImpl (Args&&...) { }
 #else
 #   error "no implemented"
 #endif
+
+
+// No Copy
+#define LITE_DECLARE_NOCOPY(type)             \
+    type (const type &) = delete;             \
+    type & operator= (const type &) = delete;
+
 
 //
 // Concatenation

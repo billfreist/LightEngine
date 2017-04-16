@@ -11,8 +11,10 @@ LITE_NAMESPACE_BEGIN(lite, platform)
 class WindowsWindow : public Window {
 public:
 
-    WindowsWindow (HWND hwnd);
+    WindowsWindow ();
     ~WindowsWindow ();
+
+    void SetHandle (HWND handle);
 
 public: // Window
 

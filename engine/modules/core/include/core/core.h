@@ -16,6 +16,7 @@
 #include <thread>
 #include <new>
 #include <fstream>
+#include <type_traits>
 
 // Enabled
 namespace lite {
@@ -39,5 +40,6 @@ inline bool IsEnabled<0> () {
 #include <core/memory.h>
 #include <core/types.h>
 #include <core/atomic.h>
+#include <core/ptr.h>
 #include <core/spin_lock.h>
 #include <core/thread.h>

@@ -18,8 +18,8 @@ public:
 
 private:
 
-    volatile int32_t m_lock = 0;
-    uint32_t         m_spinCount;
+    Atomic<int32_t> m_lock{ 0 };
+    uint32_t        m_spinCount;
 };
 
 LITE_NAMESPACE_END(lite)
