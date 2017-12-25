@@ -1,6 +1,7 @@
 
 -- Constants
 BX_DIR   = path.join(ROOT_DIR, "../bx/")
+BIMG_DIR = path.join(ROOT_DIR, "../bimg/")
 BGFX_DIR = path.join(ROOT_DIR, "../bgfx/")
 
 -- Compat

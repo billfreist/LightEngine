@@ -7,6 +7,12 @@ dofile (path.join(BX_DIR, "scripts", "bx.lua"))
     AddCompatIncludes()
 
 -----------------------------------------------------------
+--- Include BIMG
+-----------------------------------------------------------
+dofile (path.join(BIMG_DIR, "scripts", "bimg.lua"))
+    AddCompatIncludes()
+
+-----------------------------------------------------------
 -- Include BGFX
 -----------------------------------------------------------
 function copyLib ()
@@ -31,6 +37,9 @@ dofile (path.join(BGFX_DIR, "scripts", "bgfx.lua"))
             "BGFX_CONFIG_RENDERER_DIRECT3D11=1",
             "BGFX_CONFIG_RENDERER_DIRECT3D12=1",
             "BGFX_CONFIG_RENDERER_OPENGL=1",
+        }
+        buildoptions_cpp {
+            "/wd4459", -- declaration of '' hides global declaration
         }
 
     configuration { }

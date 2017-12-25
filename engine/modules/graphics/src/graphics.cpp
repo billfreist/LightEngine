@@ -5,7 +5,7 @@
 #include "pch.h"
 
 #include <bx/allocator.h>
-#include <bx/fpumath.h>
+#include <bx/math.h>
 #include <common/debugdraw/debugdraw.h>
 #include <bgfx/platform.h>
 
@@ -169,7 +169,7 @@ Scene::Scene (const Params & params) : m_params(params) {
 }
 
 Scene::~Scene () {
-    bgfx::destroyFrameBuffer(bgfx::FrameBufferHandle{ m_frameBuffer });
+    bgfx::destroy(bgfx::FrameBufferHandle{ m_frameBuffer });
     if (!--s_sceneCount)
         s_context.Destroy();
 }
