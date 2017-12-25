@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite, physics)
+namespace lite { namespace physics {
 
 TEST(Physics, Init) {
     WorldParams params;
@@ -25,7 +25,7 @@ TEST(Physics, Init) {
     world.DestroyRigidBody(groundPlaneBody);
 }
 
-LITE_NAMESPACE_END(lite, physics)
+}} // namespace lite::physics
 
 int LiteMain (int argc, char ** argsv) {
     testing::InitGoogleTest(&argc, argsv);

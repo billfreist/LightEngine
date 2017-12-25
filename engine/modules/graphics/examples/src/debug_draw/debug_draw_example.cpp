@@ -6,7 +6,7 @@
 
 #include <core/geometry.h>
 
-LITE_NAMESPACE_BEGIN(lite, graphics, example)
+namespace lite { namespace graphics { namespace example {
 
 class DebugDraw : public example_framework::ExampleBase {
 public:
@@ -32,4 +32,4 @@ int DebugDraw::Update () {
     return 0;
 }
 
-LITE_NAMESPACE_END(lite, graphics, example)
+}}} // namespace lite::graphics::examplelite_ am

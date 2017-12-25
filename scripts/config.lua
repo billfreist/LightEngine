@@ -76,6 +76,7 @@ local function _CommonProjectConfig (name, directory)
 
     includedirs {
         path.join(directory, "include"),
+        path.join(directory, "src"),
     }
 
     files {

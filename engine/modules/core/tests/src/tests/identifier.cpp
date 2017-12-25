@@ -5,7 +5,7 @@
 #include "pch.h"
 #include <core/identifer.h>
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 LITE_UNIQUE_IDENTIFIER(AlphaId, uint32_t);
 LITE_UNIQUE_IDENTIFIER(BetaId, uint32_t);
@@ -20,4 +20,4 @@ TEST(Identifier, TypeSafety) {
     EXPECT_FALSE(idA > idAA);
 }
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

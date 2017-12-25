@@ -6,7 +6,7 @@
 
 extern int LiteMain (int argc, char ** argsv);
 
-LITE_NAMESPACE_BEGIN(lite, platform)
+namespace lite { namespace platform {
 
 static Application * s_application;
 
@@ -52,4 +52,4 @@ uint32_t Application::ThreadProc (Application * thisPtr, int argc, char ** argsv
     return thisPtr->m_exitCode;
 }
 
-LITE_NAMESPACE_END(lite, platform)
+}} // namespace lite::platform

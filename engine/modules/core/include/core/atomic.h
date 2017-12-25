@@ -6,7 +6,7 @@
 
 #include <atomic>
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 ///////////////////////////////////////////////////////////
 //
@@ -67,6 +67,6 @@ private:
     std::atomic<T> m_val;
 };
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite
 
 #include <core/inline/atomic.inl>

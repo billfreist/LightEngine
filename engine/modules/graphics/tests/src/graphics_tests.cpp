@@ -4,14 +4,14 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite, graphics)
+namespace lite { namespace graphics {
 
 TEST(Graphics, Init) {
     graphics::Scene scene({});
     scene.Render();
 }
 
-LITE_NAMESPACE_END(lite, graphics)
+}} // namespace lite::graphics
 
 int LiteMain (int argc, char ** argsv) {
     testing::InitGoogleTest(&argc, argsv);

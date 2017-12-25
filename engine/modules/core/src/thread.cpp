@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 // Thread
 Thread::Thread (uint32_t stackSize, const char * name) {
@@ -59,4 +59,4 @@ void ThreadYield () {
 #endif
 }
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

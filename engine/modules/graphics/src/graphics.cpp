@@ -9,7 +9,7 @@
 #include <common/debugdraw/debugdraw.h>
 #include <bgfx/platform.h>
 
-LITE_NAMESPACE_BEGIN(lite, graphics)
+namespace lite { namespace graphics {
 
 class BgfxAllocator : public bx::AllocatorI {
 public:
@@ -209,4 +209,4 @@ void Scene::SetCamera (const Vec3f & eye, const Vec3f & target) {
     bgfx::setViewTransform(m_view, viewMtx, projMtx);
 }
 
-LITE_NAMESPACE_END(lite, graphics)
+}} // namespace lite::graphics

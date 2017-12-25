@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite, test_framework)
+namespace lite { namespace test_framework {
 
 TEST(TestFramework, Init) {
 }
@@ -17,7 +17,7 @@ TEST(TestFramework, Eq) {
     EXPECT_EQ(1, 1);
 }
 
-LITE_NAMESPACE_END(lite, test_framework)
+}} // namespace lite::test_framework
 
 int LiteMain (int argc, char ** argsv) {
     testing::InitGoogleTest(&argc, argsv);

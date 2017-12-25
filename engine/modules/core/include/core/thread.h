@@ -6,7 +6,7 @@
 
 #include <functional>
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 // Thread
 class Thread : std::thread {
@@ -54,4 +54,4 @@ uint32_t ThreadGetId ();
 void     ThreadSleep (uint32_t timeMs);
 void     ThreadYield ();
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 TEST(Vec3, Operators) {
     Vec3f a(2.0f);
@@ -12,4 +12,4 @@ TEST(Vec3, Operators) {
     EXPECT_EQ(Vec3f(3.0f), a + b);
 }
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

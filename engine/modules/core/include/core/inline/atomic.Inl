@@ -4,7 +4,7 @@
 
 #pragma once
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 ///////////////////////////////////////////////////////////
 //
@@ -116,4 +116,4 @@ inline bool Atomic<T>::CompareExchangeWeakRelaxed (T val, T comparand) {
     return m_val.compare_exchange_weak(comparand, val, std::memory_order_relaxed);
 }
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

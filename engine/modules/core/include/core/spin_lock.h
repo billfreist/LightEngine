@@ -4,7 +4,7 @@
 
 #pragma once
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 // SpinLock
 class LITE_ALIGN_CACHELINE SpinLock final {
@@ -22,6 +22,6 @@ private:
     uint32_t        m_spinCount;
 };
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite
 
 #include <core/inline/spin_lock.inl>

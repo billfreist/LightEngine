@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 TEST(Allocator, Alloc) {
     // Macro Alloc/Free
@@ -35,4 +35,4 @@ TEST(Allocator, Cmp) {
     LITE_ASSERT(MemCmp(ptr, &cmp, sizeof(*ptr)) == 0);
 }
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

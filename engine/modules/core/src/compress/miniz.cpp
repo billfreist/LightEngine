@@ -7,7 +7,7 @@
 #include <compress/miniz.h>
 #include "miniz/miniz.c"
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 constexpr int kMemLevel   = INT32_C(9);
 constexpr int kWindowBits = INT32_C(MZ_DEFAULT_WINDOW_BITS);
@@ -153,4 +153,4 @@ void MiniZCompressor::InitDecompressContext () {
     mz_inflateInit2(static_cast<mz_streamp>(m_decompressContext), kWindowBits);
 }
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

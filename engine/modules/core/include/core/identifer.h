@@ -4,7 +4,7 @@
 
 #pragma once
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 #define LITE_UNIQUE_IDENTIFIER(name, integral)               \
     class name {                                             \
@@ -30,4 +30,4 @@ LITE_NAMESPACE_BEGIN(lite)
         static_assert(std::is_integral<RawType>::value, ""); \
     };
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

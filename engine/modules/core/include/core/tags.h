@@ -4,9 +4,9 @@
 
 #pragma once
 
-LITE_NAMESPACE_BEGIN(lite, tag)
+namespace lite { namespace tag {
 
 enum class Identity      { };
 enum class Uninitialized { };
 
-LITE_NAMESPACE_END(lite, tag)
+}} // namespace lite::tag

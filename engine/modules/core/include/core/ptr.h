@@ -7,11 +7,18 @@
 #include <memory>
 #include <type_traits>
 
-LITE_NAMESPACE_BEGIN(lite, tag)
+///////////////////////////////////////////////////////////
+//
+//    Tags
+//
+///////////////////////////////////////////////////////////
+
+namespace lite { namespace tag {
 
 enum class RawPtr { };
 
-LITE_NAMESPACE_END(tag)
+} // namespace tag
+
 
 ///////////////////////////////////////////////////////////
 //
@@ -150,6 +157,6 @@ public:
     WeakPtr (T * ptrRaw, tag::RawPtr) : std::weak_ptr<T>(ptrRaw) { }
 };
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite
 
 #include <core/inline/ptr.inl>

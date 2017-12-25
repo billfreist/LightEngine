@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 template<typename T, typename... Args>
 static void Construct (T * ptr, Args... args) {
@@ -54,4 +54,4 @@ void MemZero (void * ptr, size_t bytes) {
 }
 
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

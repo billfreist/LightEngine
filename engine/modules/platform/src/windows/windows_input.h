@@ -6,9 +6,9 @@
 
 #if LITE_OS_WINDOWS
 
-LITE_NAMESPACE_BEGIN(lite, platform)
+namespace lite { namespace platform {
 
 
-LITE_NAMESPACE_END(lite, platform)
+}} // namespace lite::platform
 
 #endif // #if LITE_OS_WINDOWS

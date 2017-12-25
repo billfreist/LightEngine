@@ -101,25 +101,3 @@ inline void lite_RefImpl (Args&&...) { }
 //
 #define LITE_MACRO_DISPATCH(prefix, ...) _LITE_MACRO_DISPATCH(prefix, LITE_ARG_COUNT(__VA_ARGS__) )
 #define _LITE_MACRO_DISPATCH(prefix, count) LITE_CONCAT(prefix, count)
-
-//
-// Namespace
-//
-#define LITE_NAMESPACE_BEGIN(...) LITE_MACRO_DISPATCH(_LITE_NAMESPACE_BEGIN_, __VA_ARGS__) LITE_ARGS_FROWARD(__VA_ARGS__)
-#define LITE_NAMESPACE_END(...)   LITE_MACRO_DISPATCH(_LITE_NAMESPACE_END_, __VA_ARGS__) LITE_ARGS_FROWARD(__VA_ARGS__)
-#define LITE_NAMESPACE_ANONYMOUS
-
-
-#define _LITE_NAMESPACE_BEGIN_1(a1)                     namespace a1 {
-#define _LITE_NAMESPACE_BEGIN_2(a1, a2)                 _LITE_NAMESPACE_BEGIN_1(a1)                 _LITE_NAMESPACE_BEGIN_1(a2)
-#define _LITE_NAMESPACE_BEGIN_3(a1, a2, a3)             _LITE_NAMESPACE_BEGIN_2(a1, a2)             _LITE_NAMESPACE_BEGIN_1(a3)
-#define _LITE_NAMESPACE_BEGIN_4(a1, a2, a3, a4)         _LITE_NAMESPACE_BEGIN_3(a1, a2, a3)         _LITE_NAMESPACE_BEGIN_1(a4)
-#define _LITE_NAMESPACE_BEGIN_5(a1, a2, a3, a4, a5)     _LITE_NAMESPACE_BEGIN_4(a1, a2, a3, a4)     _LITE_NAMESPACE_BEGIN_1(a5)
-#define _LITE_NAMESPACE_BEGIN_6(a1, a2, a3, a4, a5, a6) _LITE_NAMESPACE_BEGIN_5(a1, a2, a3, a4, a5) _LITE_NAMESPACE_BEGIN_1(a6)
-
-#define _LITE_NAMESPACE_END_1(a1)                     }
-#define _LITE_NAMESPACE_END_2(a1, a2)                 _LITE_NAMESPACE_END_1(a1)                 _LITE_NAMESPACE_END_1(a2)
-#define _LITE_NAMESPACE_END_3(a1, a2, a3)             _LITE_NAMESPACE_END_2(a1, a2)             _LITE_NAMESPACE_END_1(a3)
-#define _LITE_NAMESPACE_END_4(a1, a2, a3, a4)         _LITE_NAMESPACE_END_3(a1, a2, a3)         _LITE_NAMESPACE_END_1(a4)
-#define _LITE_NAMESPACE_END_5(a1, a2, a3, a4, a5)     _LITE_NAMESPACE_END_4(a1, a2, a3, a4)     _LITE_NAMESPACE_END_1(a5)
-#define _LITE_NAMESPACE_END_6(a1, a2, a3, a4, a5, a6) _LITE_NAMESPACE_END_5(a1, a2, a3, a4, a5) _LITE_NAMESPACE_END_1(a6)

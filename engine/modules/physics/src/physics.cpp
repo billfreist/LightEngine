@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite, physics)
+namespace lite { namespace physics {
 
 ///////////////////////////////////////////////////////////
 //
@@ -36,12 +36,22 @@ World::World (const WorldParams & params)
 
 }
 
+void World::Step (float timeSecs) {
+    LITE_REF(timeSecs);
+    for (RigidBody * ptr : m_rigidBodies) {
+        LITE_REF(ptr);
+    }
+}
+
 RigidBody * World::CreateRigidBody (const RigidBodyParams & params) {
-    return LITE_NEW(RigidBody)(params);
+    RigidBody * ptr = LITE_NEW(RigidBody)(params);
+    m_rigidBodies.Add(ptr);
+    return ptr;
 }
 
 void World::DestroyRigidBody (RigidBody * ptr) {
+    m_rigidBodies.RemoveValueOrdered(ptr);
     LITE_DEL(ptr);
 }
 
-LITE_NAMESPACE_END(lite, physics)
+}} // namespace lite::physics

@@ -23,7 +23,7 @@
 // Stack allocations
 #define LITE_STACK_ALLOC(T, n) reinterpret_cast<T *>(alloca(sizeof(T) * n))
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 template<typename T>
 inline void Delete (T * ptr) {
@@ -33,4 +33,4 @@ inline void Delete (T * ptr) {
     }
 }
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

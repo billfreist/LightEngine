@@ -6,7 +6,7 @@
 
 #include <core/geometry.h>
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 ///////////////////////////////////////////////////////////
 //
@@ -29,4 +29,4 @@ interface IDebugDrawer {
     virtual void DrawSphere (const Sphere & sphere) = 0;
 };
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

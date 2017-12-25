@@ -4,7 +4,7 @@
 
 #pragma once
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 struct Sphere {
     ///
@@ -22,4 +22,4 @@ struct Box {
     Vec3f halfDims;
 };
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

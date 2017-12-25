@@ -4,10 +4,10 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite, example_framework)
+namespace lite { namespace example_framework {
 
 
-LITE_NAMESPACE_END(lite, example_framework)
+}} // namespace lite::example_framework
 
 int LiteMain (int argc, char ** argsv) {
     testing::InitGoogleTest(&argc, argsv);

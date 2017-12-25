@@ -4,7 +4,7 @@
 
 #pragma once
 
-LITE_NAMESPACE_BEGIN(lite, physics)
+namespace lite { namespace physics {
 
 ///////////////////////////////////////////////////////////
 //
@@ -115,12 +115,17 @@ public:
     World (const WorldParams & params);
 
     ///
+    void Step (float timeSecs);
+
+    ///
     RigidBody * CreateRigidBody (const RigidBodyParams & params);
     void        DestroyRigidBody (RigidBody * ptr);
 
 private:
 
+    Array<RigidBody *> m_rigidBodies;
+
     const WorldParams m_params;
 };
 
-LITE_NAMESPACE_END(lite, physics)
+}} // namespace lite::physics

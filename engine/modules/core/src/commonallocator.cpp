@@ -5,7 +5,7 @@
 #include "pch.h"
 #include <malloc.h>
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 void * CommonAllocator::Alloc (size_t bytes) {
     return ::malloc(bytes);
@@ -31,4 +31,4 @@ void CommonAllocator::FreeAligned (void * ptr, size_t /* align */) {
     ::_aligned_free(ptr);
 }
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

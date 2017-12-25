@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite, platform)
+namespace lite { namespace platform {
 
 void TestCreateWindow () {
     WindowPtr window = Application::Get()->CreateWindow();
@@ -16,7 +16,7 @@ void TestCreateWindow () {
     }
 }
 
-LITE_NAMESPACE_END(lite, platform)
+}} // namespace lite::platform
 
 int LiteMain (int argc, char ** argsv) {
     LITE_REF(argc, argsv);

@@ -8,7 +8,7 @@
 
 #include <platform/input.h>
 
-LITE_NAMESPACE_BEGIN(lite, platform)
+namespace lite { namespace platform {
 
 class Window;
 using WindowPtr = SharedPtr<Window>;
@@ -78,4 +78,4 @@ protected:
     virtual ~Window () = default;
 };
 
-LITE_NAMESPACE_END(lite, platform)
+}} // namespace lite::platform

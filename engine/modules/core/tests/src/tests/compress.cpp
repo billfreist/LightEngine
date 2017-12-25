@@ -8,7 +8,7 @@
 #include <sys/stat.h>
 #include <compress/MiniZ.h>
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 constexpr uint32_t kRawBytes = 1024 * 50;
 
@@ -37,4 +37,4 @@ TEST(Compress, MiniZWithCtx) {
     EXPECT_EQ(0, MemCmp(rawData, decData, kRawBytes));
 }
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

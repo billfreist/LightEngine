@@ -2,7 +2,7 @@
 /// LICENSE
 ///
 
-#include "pch.h"
+#include <pch.h>
 
 #if LITE_OS_WINDOWS
 
@@ -16,7 +16,7 @@
 #   undef CreateWindow
 #endif
 
-LITE_NAMESPACE_BEGIN(lite, platform)
+namespace lite { namespace platform {
 
 enum UserWindowMsg : int32_t {
     kCreateWindow = WM_USER,
@@ -221,7 +221,7 @@ uint32_t WindowsApplication::ThreadProc (WindowsApplication * thisPtr, int argc,
     return exitCode;
 }
 
-LITE_NAMESPACE_END(lite, platform)
+}} // namespace lite::platform
 
 
 // Application main entry point

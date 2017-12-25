@@ -4,6 +4,6 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

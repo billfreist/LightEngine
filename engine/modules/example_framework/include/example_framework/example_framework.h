@@ -4,14 +4,14 @@
 
 #pragma once
 
-LITE_NAMESPACE_BEGIN(lite, graphics)
+namespace lite { namespace graphics {
 
 class Scene;
 
-LITE_NAMESPACE_END(lite, graphics)
+}} // namespace lite::graphics
 
 
-LITE_NAMESPACE_BEGIN(lite, example_framework)
+namespace lite { namespace example_framework {
 
 #define LITE_EXAMPLE_DEFINITION(t)                                                       \
     static class ExampleDecl {                                                           \
@@ -57,4 +57,4 @@ using ExampleFlags = Flags<ExampleFlag>;
 
 int RunExample (ExampleFlags flags, int argc, char ** argsv);
 
-LITE_NAMESPACE_END(lite, example_framework)
+}} // namespace lite::example_framework

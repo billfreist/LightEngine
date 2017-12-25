@@ -6,7 +6,7 @@
 
 #pragma once
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 class CommonAllocator {
 public:
@@ -19,7 +19,7 @@ public:
     static void   FreeAligned (void * ptr, size_t align);
 };
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite
 
 
 /// Global new/delete overloads

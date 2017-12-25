@@ -14,7 +14,7 @@
 #define interface struct LITE_NO_VTABLE
 
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 ///////////////////////////////////////////////////////////
 //
@@ -61,7 +61,7 @@ struct Type3 {
     Type3 (const Type2<T> & type2, T z) : x(type2.x), y(type2.y), z(z) { }
     Type3 (const Type3<T> & type3) : x(type3.x), y(type3.y), z(type3.z) { }
 
-    Type3 & operator= (const Type3 & type3) { x = type3.x; y = type3.y; z = type3.z; return *this; }
+    Type3 & operator= (const Type3 & rhs) { x = rhs.x; y = rhs.y; z = rhs.z; return *this; }
 
     bool operator== (const Type3 & rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
     bool operator!= (const Type3 & rhs) const { return !(*this == rhs); }
@@ -104,7 +104,7 @@ struct Type4 {
     Type4 (const Type3<T> & type3, T w) : x(type3.x), y(type3.y), z(type3.z), w(w) { }
     Type4 (const Type4<T> & type4) : x(type4.x), y(type4.y), z(type4.z), w(type4.w) { }
 
-    Type4 & operator= (const Type4 & type4) { x = type4.x; y = type4.y; z = type4.z; w = type4.w; return *this; }
+    Type4 & operator= (const Type4 & rhs) { x = rhs.x; y = rhs.y; z = rhs.z; w = rhs.w; return *this; }
 
     bool operator== (const Type4 & rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w; }
     bool operator!= (const Type4 & rhs) const { return !(*this == rhs); }
@@ -206,7 +206,7 @@ public:
             (m_vec.y * m_vec.y) +
             (m_vec.z * m_vec.z) +
             (m_vec.w * m_vec.w);
-        return sqrt(lenSq) < 1.e-5f;
+        return std::sqrtf(lenSq) < 1.e-5f;
     }
     Quaternion & Normalize () {
         const float lenSq =
@@ -215,7 +215,7 @@ public:
             (m_vec.z * m_vec.z) +
             (m_vec.w * m_vec.w);
         if (std::isnormal(lenSq)) {
-            const float len = sqrt(lenSq);
+            const float len = std::sqrtf(lenSq);
             m_vec /= len;
         }
         else {
@@ -306,10 +306,12 @@ public:
     void Push (const T & data) { std::vector<T>::push_back(data); }
     T    Pop ()                { T tmp(std::move(std::vector<T>::back())); std::vector<T>::pop_back(); return tmp; }
 
-   // T * Add (const T & v)               { std::vector<T>::push_back(v); return &std::vector<T>::back(); }
+    T * Add (const T & v)               { std::vector<T>::push_back(v); return &std::vector<T>::back(); }
     T * Add (T && v)                    { std::vector<T>::push_back(std::forward<T>(v)); return &std::vector<T>::back(); }
     void RemoveOrdered (const T * ptr)  { std::vector<T>::erase(std::vector<T>::begin() + (ptr - Ptr())); }
     void RemoveOrdered (uint32_t index) { std::vector<T>::erase(std::vector<T>::begin() + index); }
+
+    void RemoveValueOrdered (const T & val) { std::vector<T>::erase(std::find(std::vector<T>::begin(), std::vector<T>::end(), val)); }
 
     void     Clear ()       { std::vector<T>::clear(); }
     void     Reset ()       { std::vector<T>::clear(); }
@@ -443,4 +445,4 @@ using Flags16 = Flags<uint16_t>;
 using Flags32 = Flags<uint32_t>;
 using Flags64 = Flags<uint64_t>;
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite

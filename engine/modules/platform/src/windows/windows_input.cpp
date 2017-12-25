@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite, platform)
+namespace lite { namespace platform {
 
 struct ModifierKeyMapping {
     int      osKey;
@@ -114,4 +114,4 @@ KeyMappings::KeyMappings () {
     m_keys[uint8_t('z')] = Key::Z;
 }
 
-LITE_NAMESPACE_END(lite, platform)
+}} // namespace lite::platform

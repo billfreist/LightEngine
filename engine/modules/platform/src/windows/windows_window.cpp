@@ -4,10 +4,10 @@
 
 #include "pch.h"
 
-LITE_NAMESPACE_BEGIN(lite, platform)
+namespace lite { namespace platform {
 
-constexpr HWND kInvalidHwnd = (HWND)-1;
-constexpr HWND kClosedHwnd  = (HWND)-2;
+static const HWND kInvalidHwnd = (HWND)-1;
+static const HWND kClosedHwnd  = (HWND)-2;
 
 
 WindowsWindow::WindowsWindow () : m_hwnd(kInvalidHwnd) {
@@ -40,4 +40,4 @@ void * WindowsWindow::GetHandle () const {
     return (void *)m_hwnd;
 }
 
-LITE_NAMESPACE_END(lite, platform)
+}} // namespace lite::platform

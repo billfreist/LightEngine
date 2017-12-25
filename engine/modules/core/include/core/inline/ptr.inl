@@ -4,7 +4,7 @@
 
 #pragma once
 
-LITE_NAMESPACE_BEGIN(lite)
+namespace lite {
 
 ///////////////////////////////////////////////////////////
 //
@@ -179,4 +179,4 @@ inline bool SharedPtr<T>::operator!= (const SharedPtr<TorDerived> & rhs) const {
     return m_ptr != rhs.m_ptr;
 }
 
-LITE_NAMESPACE_END(lite)
+} // namespace lite
