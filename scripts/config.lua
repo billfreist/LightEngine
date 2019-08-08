@@ -23,8 +23,10 @@ defines {
 flags {
     "ExtraWarnings",
     "FatalWarnings",
+    "NoEditAndContinue",
     "NoRTTI",
     "StaticRuntime",
+    "Symbols",
 }
 
 configuration { "Debug" }
@@ -33,7 +35,6 @@ configuration { "Debug" }
     }
     flags {
         "DebugRuntime",
-        "Symbols",
     }
 
 configuration { "Release" }

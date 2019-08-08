@@ -45,9 +45,9 @@ public:
 
 private:
 
-    const Params m_params;
-    uint16_t     m_frameBuffer;
-    View         m_view;
+    const Params      m_params;
+    class DebugDraw * m_debugDraw;
+    View              m_view;
 };
 
 }} // namespace lite::graphics

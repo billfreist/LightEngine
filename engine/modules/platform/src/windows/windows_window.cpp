@@ -32,6 +32,15 @@ WindowsWindow::~WindowsWindow () {
         ::DestroyWindow(hwnd);
 }
 
+void WindowsWindow::Destroy () {
+    HWND hwnd = m_hwnd.Load();
+    if (hwnd == kClosedHwnd)
+        return;
+
+    m_hwnd.Set(kClosedHwnd);
+    ::DestroyWindow(hwnd);
+}
+
 bool WindowsWindow::IsClosed () const {
     return m_hwnd.LoadRelaxed() == kClosedHwnd;
 }
@@ -43,15 +52,6 @@ void WindowsWindow::Close () {
 
     m_hwnd.Set(kClosedHwnd);
     SendMessageA(hwnd, WM_CLOSE, 0, 0);
-}
-
-void WindowsWindow::Destroy () {
-    HWND hwnd = m_hwnd.Load();
-    if (hwnd == kClosedHwnd)
-        return;
-
-    m_hwnd.Set(kClosedHwnd);
-    ::DestroyWindow(hwnd);
 }
 
 void * WindowsWindow::GetHandle () const {

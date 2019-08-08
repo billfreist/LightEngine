@@ -6,7 +6,12 @@
 
 namespace lite {
 
-// Thread
+///////////////////////////////////////////////////////////
+//
+//    Thread
+//
+///////////////////////////////////////////////////////////
+
 Thread::Thread (uint32_t stackSize, const char * name) {
     LITE_REF(stackSize, name);
 }
@@ -54,6 +59,50 @@ void ThreadSleep (uint32_t timeMs) {
 void ThreadYield () {
 #if LITE_OS_WINDOWS
     ::SwitchToThread();
+#else
+#   error "not implemented"
+#endif
+}
+
+
+///////////////////////////////////////////////////////////
+//
+//    Event
+//
+///////////////////////////////////////////////////////////
+
+Event::Event (bool manualReset) {
+#if LITE_OS_WINDOWS
+    m_data = ::CreateEventA(
+        nullptr,     // attributes
+        manualReset,
+        false,       // initialState
+        nullptr      // name
+    );
+#else
+#   error "not implemented"
+#endif
+}
+
+Event::~Event () {
+#if LITE_OS_WINDOWS
+    ::CloseHandle(m_data);
+#else
+#   error "not implemented"
+#endif
+}
+
+void Event::Signal () {
+#if LITE_OS_WINDOWS
+    ::SetEvent(m_data);
+#else
+#   error "not implemented"
+#endif
+}
+
+void Event::Wait () {
+#if LITE_OS_WINDOWS
+    ::WaitForSingleObject(m_data, INFINITE);
 #else
 #   error "not implemented"
 #endif

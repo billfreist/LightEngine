@@ -11,7 +11,13 @@
 
 namespace lite { namespace graphics {
 
-class BgfxAllocator : public bx::AllocatorI {
+///////////////////////////////////////////////////////////
+//
+//    BgfxAllocator
+//
+///////////////////////////////////////////////////////////
+
+class BgfxAllocator final : public bx::AllocatorI {
 public:
 
     void * realloc (void * _ptr, size_t _size, size_t _align, const char * _file, uint32_t _line) override;
@@ -46,6 +52,100 @@ static BgfxAllocator s_allocator;
 
 ///////////////////////////////////////////////////////////
 //
+//    BgfxCallback
+//
+///////////////////////////////////////////////////////////
+
+class BgfxCallback final : public bgfx::CallbackI {
+    void fatal(
+        const char* _filePath
+        , uint16_t _line
+        , bgfx::Fatal::Enum _code
+        , const char* _str
+    ) override {
+        LITE_REF(_filePath, _line, _code, _str);
+    }
+
+    void traceVargs(
+        const char* _filePath
+        , uint16_t _line
+        , const char* _format
+        , va_list _argList
+    ) override {
+        LITE_REF(_filePath, _line, _format, _argList);
+    }
+
+    void profilerBegin(
+        const char* _name
+        , uint32_t _abgr
+        , const char* _filePath
+        , uint16_t _line
+    ) override {
+        LITE_REF(_name, _abgr, _filePath, _line);
+    }
+
+    void profilerBeginLiteral(
+        const char* _name
+        , uint32_t _abgr
+        , const char* _filePath
+        , uint16_t _line
+    ) override {
+        LITE_REF(_name, _abgr, _filePath, _line);
+    }
+
+    void profilerEnd() override {
+
+    }
+
+    uint32_t cacheReadSize(uint64_t _id) override {
+        LITE_REF(_id);
+        return 0;
+    }
+
+    bool cacheRead(uint64_t _id, void* _data, uint32_t _size) override {
+        LITE_REF(_id, _data, _size);
+        return false;
+    }
+
+    void cacheWrite(uint64_t _id, const void* _data, uint32_t _size) override {
+        LITE_REF(_id, _data, _size);
+    }
+
+    void screenShot(
+        const char* _filePath
+        , uint32_t _width
+        , uint32_t _height
+        , uint32_t _pitch
+        , const void* _data
+        , uint32_t _size
+        , bool _yflip
+    ) override {
+        LITE_REF(_filePath, _width, _height, _pitch, _data, _size, _yflip);
+    }
+
+    void captureBegin(
+        uint32_t _width
+        , uint32_t _height
+        , uint32_t _pitch
+        , bgfx::TextureFormat::Enum _format
+        , bool _yflip
+    ) override {
+        LITE_REF(_width, _height, _pitch, _format, _yflip);
+    }
+
+    void captureEnd() override {
+
+    }
+
+    void captureFrame(const void* _data, uint32_t _size) override {
+        LITE_REF(_data, _size);
+    }
+};
+static BgfxCallback s_callback;
+
+
+///////////////////////////////////////////////////////////
+//
 //    RenderContext
 //
 ///////////////////////////////////////////////////////////
@@ -65,19 +165,24 @@ private:
 static ExplicitConstructor<RenderContext> s_context;
 
 RenderContext::RenderContext (const bgfx::PlatformData & data) {
-    bgfx::setPlatformData(data);
-    const bool initialized = bgfx::init(
-        data.nwh ? bgfx::RendererType::Count : bgfx::RendererType::Noop,
-        BGFX_PCI_ID_NONE,
-        0, // deviceId
-        nullptr,
-        &s_allocator
-    );
+    bgfx::Init init;
+    init.platformData = data;
+    init.type      = data.nwh ? bgfx::RendererType::Count : bgfx::RendererType::Noop;
+    init.vendorId  = BGFX_PCI_ID_NONE;
+    init.deviceId  = 0;
+    init.allocator = &s_allocator;
+    init.callback  = &s_callback;
+    init.debug     = false;
+    init.profile   = false;
+    init.resolution.maxFrameLatency = 1;
+    init.resolution.width           = 1280;
+    init.resolution.height          = 720;
+    init.resolution.reset           = BGFX_RESET_VSYNC;
+    const bool initialized = bgfx::init(init);
     LITE_ASSERT(initialized);
-    bgfx::reset(1280, 720, BGFX_RESET_VSYNC);
 
     // Initialize debug draw
-    ddInit(true, &s_allocator);
+    ddInit(&s_allocator);
 
     // Initialize debugging
     bgfx::setDebug(BGFX_DEBUG_TEXT);
@@ -116,35 +221,36 @@ public: // IDebugDrawer
 
 private:
 
+    DebugDrawEncoder m_encoder;
     View m_view = 0;
 };
 
 void DebugDraw::Begin () {
-    ddBegin(m_view);
+    m_encoder.begin(m_view);
 }
 
 void DebugDraw::End () {
-    ddEnd();
+    m_encoder.end();
 }
 
 void DebugDraw::MoveTo (const Vec3f & pos) {
-    ddMoveTo(&pos);
+    m_encoder.moveTo(reinterpret_cast<const bx::Vec3 &>(pos));
 }
 
 void DebugDraw::LineTo (const Vec3f & pos) {
-    ddLineTo(&pos);
+    m_encoder.lineTo(reinterpret_cast<const bx::Vec3 &>(pos));
 }
 
 void DebugDraw::Close () {
-    ddClose();
+    m_encoder.close();
 }
 
 void DebugDraw::DrawSphere (const Sphere & sphere) {
     LITE_REF(sphere);
     ::Sphere _sphere;
-    MemCopy(&_sphere.m_center, &sphere.center, sizeof(sphere.center));
-    _sphere.m_radius = sphere.radius;
-    ddDraw(_sphere);
+    MemCopy(&_sphere.center, &sphere.center, sizeof(sphere.center));
+    _sphere.radius = sphere.radius;
+    m_encoder.draw(_sphere);
 }
 
 
@@ -164,14 +270,15 @@ Scene::Scene (const Params & params) : m_params(params) {
         s_context.Init(platformData);
     }
     m_view = s_context->AllocView();
-    m_frameBuffer = bgfx::createFrameBuffer(m_params.windowHandle, 1280, 720).idx;
+    m_debugDraw = LITE_NEW(DebugDraw);
     bgfx::resetView(m_view);
 }
 
 Scene::~Scene () {
-    bgfx::destroy(bgfx::FrameBufferHandle{ m_frameBuffer });
-    if (!--s_sceneCount)
+    LITE_DEL(m_debugDraw);
+    if (!--s_sceneCount) {
         s_context.Destroy();
+    }
 }
 
 void Scene::Render () {
@@ -192,16 +299,19 @@ void Scene::Render () {
 }
 
 IDebugDrawer * Scene::GetDebugDrawer () {
-    static DebugDraw s_debugDraw;
-    s_debugDraw.SetView(m_view);
-    return &s_debugDraw;
+    m_debugDraw->SetView(m_view);
+    return m_debugDraw;
 }
 
 void Scene::SetCamera (const Vec3f & eye, const Vec3f & target) {
     bgfx::setViewRect(m_view, 0, 0, 1280, 720);
 
     float viewMtx[16];
-    bx::mtxLookAt(viewMtx, &eye.x, &target.x);
+    bx::mtxLookAt(
+        viewMtx,
+        reinterpret_cast<const bx::Vec3 &>(eye),
+        reinterpret_cast<const bx::Vec3 &>(target)
+    );
 
     float projMtx[16];
     bx::mtxProj(projMtx, 45.0f, 1280.0f / 720.0f, 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);

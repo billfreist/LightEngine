@@ -32,12 +32,6 @@ dofile (path.join(BGFX_DIR, "scripts", "bgfx.lua"))
     }
 
     configuration { "x64" }
-        defines {
-            "BGFX_CONFIG_RENDERER_DIRECT3D9=1",
-            "BGFX_CONFIG_RENDERER_DIRECT3D11=1",
-            "BGFX_CONFIG_RENDERER_DIRECT3D12=1",
-            "BGFX_CONFIG_RENDERER_OPENGL=1",
-        }
         buildoptions_cpp {
             "/wd4459", -- declaration of '' hides global declaration
         }
