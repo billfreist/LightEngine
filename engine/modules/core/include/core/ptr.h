@@ -13,12 +13,14 @@
 //
 ///////////////////////////////////////////////////////////
 
-namespace lite { namespace tag {
+namespace lite::tag {
 
 enum class RawPtr { };
 
 } // namespace tag
 
+
+namespace lite {
 
 ///////////////////////////////////////////////////////////
 //
@@ -87,8 +89,16 @@ public:
     /// Copy assignment of another SharePtr<T>
     SharedPtr & operator= (const SharedPtr<T> & rhs);
 
+    /// Copy assignment of another SharePtr<Derived>
+    template<class Derived>
+    void operator= (const SharedPtr<Derived> & rhs);
+
     /// Move assignment of another SharePtr<T>
     SharedPtr & operator= (SharedPtr<T> && rhs);
+
+    /// Move assignment of another SharePtr<Derived>
+    template<class Derived>
+    void operator= (SharedPtr<Derived> && rhs);
 
     /// Explicitly handle nullptr
     void operator= (std::nullptr_t);
@@ -122,7 +132,7 @@ private:
 
     T * m_ptr = nullptr;
 
-    //template<class T> friend class SharedPtr;
+    template<class T> friend class SharedPtr;
 };
 
 

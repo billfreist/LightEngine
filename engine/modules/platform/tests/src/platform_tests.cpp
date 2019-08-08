@@ -4,10 +4,10 @@
 
 #include "pch.h"
 
-namespace lite { namespace platform {
+namespace lite::platform {
 
 
-}} // namespace lite::platform
+} // namespace lite::platform
 
 int LiteMain (int argc, char ** argsv) {
     testing::InitGoogleTest(&argc, argsv);

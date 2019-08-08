@@ -16,7 +16,7 @@
 #   undef CreateWindow
 #endif
 
-namespace lite { namespace platform {
+namespace lite::platform {
 
 ///////////////////////////////////////////////////////////
 //
@@ -251,7 +251,7 @@ uint32_t WindowsApplication::ThreadProc (WindowsApplication * thisPtr, int argc,
     return exitCode;
 }
 
-}} // namespace lite::platform
+} // namespace lite::platform
 
 
 // Application main entry point

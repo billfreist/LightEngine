@@ -99,6 +99,21 @@ inline SharedPtr<T> & SharedPtr<T>::operator= (const SharedPtr<T> & rhs) {
 }
 
 template<class T>
+template<class Derived>
+void SharedPtr<T>::operator= (const SharedPtr<Derived> & rhs) {
+    static_assert(std::is_base_of_v<T, Derived>);
+    if (uintptr_t(&rhs) == uintptr_t(this))
+        return;
+
+    if (m_ptr)
+        m_ptr->DecRef();
+
+    m_ptr = rhs.m_ptr;
+    if (m_ptr)
+        m_ptr->IncRef();
+}
+
+template<class T>
 inline SharedPtr<T> & SharedPtr<T>::operator= (SharedPtr<T> && rhs) {
     if (uintptr_t(&rhs) == uintptr_t(this))
         return *this;
@@ -110,6 +125,20 @@ inline SharedPtr<T> & SharedPtr<T>::operator= (SharedPtr<T> && rhs) {
     rhs.m_ptr = nullptr;
 
     return *this;
+}
+
+template<class T>
+template<class Derived>
+void SharedPtr<T>::operator= (SharedPtr<Derived> && rhs) {
+    static_assert(std::is_base_of_v<T, Derived>);
+    if (uintptr_t(&rhs) == uintptr_t(this))
+        return;
+
+    if (m_ptr)
+        m_ptr->DecRef();
+
+    m_ptr = rhs.m_ptr;
+    rhs.m_ptr = nullptr;
 }
 
 template<class T>

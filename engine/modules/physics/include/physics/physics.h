@@ -4,7 +4,7 @@
 
 #pragma once
 
-namespace lite { namespace physics {
+namespace lite::physics {
 
 ///////////////////////////////////////////////////////////
 //
@@ -128,4 +128,4 @@ private:
     const WorldParams m_params;
 };
 
-}} // namespace lite::physics
+} // namespace lite::physics

@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-namespace lite { namespace example_framework {
+namespace lite::example_framework {
 
 class Init : public ExampleBase {
 public:
@@ -20,4 +20,4 @@ int Init::Update () {
     return 0;
 }
 
-}} // namespace lite::example_framework
+} // namespace lite::example_framework

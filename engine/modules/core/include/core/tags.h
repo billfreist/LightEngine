@@ -4,9 +4,9 @@
 
 #pragma once
 
-namespace lite { namespace tag {
+namespace lite::tag {
 
 enum class Identity      { };
 enum class Uninitialized { };
 
-}} // namespace lite::tag
+} // namespace lite::tag

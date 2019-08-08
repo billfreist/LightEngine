@@ -21,6 +21,7 @@ defines {
 }
 
 flags {
+    "Cpp17",
     "ExtraWarnings",
     "FatalWarnings",
     "NoEditAndContinue",

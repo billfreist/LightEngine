@@ -6,7 +6,7 @@
 
 #include <core/debug_drawer.h>
 
-namespace lite { namespace graphics {
+namespace lite::graphics {
 
 ///////////////////////////////////////////////////////////
 //
@@ -50,4 +50,4 @@ private:
     View              m_view;
 };
 
-}} // namespace lite::graphics
+} // namespace lite::graphics

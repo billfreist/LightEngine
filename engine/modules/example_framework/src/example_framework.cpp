@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-namespace lite { namespace example_framework {
+namespace lite::example_framework {
 
 ///
 thread_local graphics::Scene * t_scene;
@@ -110,4 +110,4 @@ int RunExample (ExampleFlags flags, int argc, char ** argsv) {
     return app.Run(argc, argsv);
 }
 
-}} // namespace lite::example_framework
+} // namespace lite::example_framework

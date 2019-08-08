@@ -6,7 +6,7 @@
 
 #if LITE_OS_WINDOWS
 
-namespace lite { namespace platform {
+namespace lite::platform {
 
 class WindowsWindow : public Window {
 public:
@@ -29,6 +29,6 @@ private:
     KeyboardState m_keyboardState;
 };
 
-}} // namespace lite::platform
+} // namespace lite::platform
 
 #endif // #if LITE_OS_WINDOWS

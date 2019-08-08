@@ -6,7 +6,7 @@
 
 #include <core/ptr.h>
 
-namespace lite { namespace platform {
+namespace lite::platform {
 
 enum class Key : uint8_t {
     Up,
@@ -124,4 +124,4 @@ struct MouseState {
     bool buttons[int32_t(MouseButtons::Count)];
 };
 
-}} // namespace lite::platform
+} // namespace lite::platform

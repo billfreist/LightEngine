@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-namespace lite { namespace physics {
+namespace lite::physics {
 
 ///////////////////////////////////////////////////////////
 //
@@ -54,4 +54,4 @@ void World::DestroyRigidBody (RigidBody * ptr) {
     LITE_DEL(ptr);
 }
 
-}} // namespace lite::physics
+} // namespace lite::physics

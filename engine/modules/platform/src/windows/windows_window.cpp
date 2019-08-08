@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-namespace lite { namespace platform {
+namespace lite::platform {
 
 ///////////////////////////////////////////////////////////
 //
@@ -58,4 +58,4 @@ void * WindowsWindow::GetHandle () const {
     return (void *)m_hwnd.LoadRelaxed();
 }
 
-}} // namespace lite::platform
+} // namespace lite::platform

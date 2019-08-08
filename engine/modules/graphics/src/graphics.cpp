@@ -9,7 +9,7 @@
 #include <common/debugdraw/debugdraw.h>
 #include <bgfx/platform.h>
 
-namespace lite { namespace graphics {
+namespace lite::graphics {
 
 ///////////////////////////////////////////////////////////
 //
@@ -319,4 +319,4 @@ void Scene::SetCamera (const Vec3f & eye, const Vec3f & target) {
     bgfx::setViewTransform(m_view, viewMtx, projMtx);
 }
 
-}} // namespace lite::graphics
+} // namespace lite::graphics

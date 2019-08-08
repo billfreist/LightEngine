@@ -4,14 +4,14 @@
 
 #pragma once
 
-namespace lite { namespace graphics {
+namespace lite::graphics {
 
 class Scene;
 
-}} // namespace lite::graphics
+} // namespace lite::graphics
 
 
-namespace lite { namespace example_framework {
+namespace lite::example_framework {
 
 #define LITE_EXAMPLE_DEFINITION(t)                                                       \
     static class ExampleDecl {                                                           \
@@ -57,4 +57,4 @@ using ExampleFlags = Flags<ExampleFlag>;
 
 int RunExample (ExampleFlags flags, int argc, char ** argsv);
 
-}} // namespace lite::example_framework
+} // namespace lite::example_framework

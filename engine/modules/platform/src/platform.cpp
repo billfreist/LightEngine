@@ -6,7 +6,7 @@
 
 extern int LiteMain (int argc, char ** argsv);
 
-namespace lite { namespace platform {
+namespace lite::platform {
 
 static Application * s_application;
 
@@ -52,4 +52,4 @@ uint32_t Application::ThreadProc (Application * thisPtr, int argc, char ** argsv
     return thisPtr->m_exitCode;
 }
 
-}} // namespace lite::platform
+} // namespace lite::platform

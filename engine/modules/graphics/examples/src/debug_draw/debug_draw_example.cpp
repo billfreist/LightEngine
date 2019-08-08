@@ -6,7 +6,7 @@
 
 #include <core/geometry.h>
 
-namespace lite { namespace graphics { namespace example {
+namespace lite::graphics::example {
 
 class DebugDraw : public example_framework::ExampleBase {
 public:
@@ -32,4 +32,4 @@ int DebugDraw::Update () {
     return 0;
 }
 
-}}} // namespace lite::graphics::examplelite_ am
+} // namespace lite::graphics::example
