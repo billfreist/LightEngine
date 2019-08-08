@@ -61,21 +61,17 @@ inline SharedPtr<T>::SharedPtr (TorDerived * ptrRaw, tag::RawPtr)
 }
 
 template<class T>
-template<class TorDerived>
-inline SharedPtr<T>::SharedPtr (const SharedPtr<TorDerived> & rhs)
+inline SharedPtr<T>::SharedPtr (const SharedPtr<T> & rhs)
     : m_ptr(rhs.m_ptr)
 {
-    static_assert(std::is_base_of_v<T, TorDerived>, "Not convertible");
     if (m_ptr)
         m_ptr->IncRef();
 }
 
 template<class T>
-template<class TorDerived>
-inline SharedPtr<T>::SharedPtr (SharedPtr<TorDerived> && rhs)
+inline SharedPtr<T>::SharedPtr (SharedPtr<T> && rhs)
     : m_ptr(rhs.m_ptr)
 {
-    static_assert(std::is_base_of_v<T, TorDerived>, "Not convertible");
     rhs.m_ptr = nullptr;
 }
 
@@ -88,9 +84,7 @@ inline SharedPtr<T>::~SharedPtr () {
 }
 
 template<class T>
-template<class TorDerived>
-inline SharedPtr<T> & SharedPtr<T>::operator= (const SharedPtr<TorDerived> & rhs) {
-    static_assert(std::is_base_of_v<T, TorDerived>, "Not convertible");
+inline SharedPtr<T> & SharedPtr<T>::operator= (const SharedPtr<T> & rhs) {
     if (uintptr_t(&rhs) == uintptr_t(this))
         return *this;
 
@@ -105,17 +99,17 @@ inline SharedPtr<T> & SharedPtr<T>::operator= (const SharedPtr<TorDerived> & rhs
 }
 
 template<class T>
-template<class TorDerived>
-inline void SharedPtr<T>::operator= (SharedPtr<TorDerived> && rhs) {
-    static_assert(std::is_base_of_v<T, TorDerived>, "Not convertible");
+inline SharedPtr<T> & SharedPtr<T>::operator= (SharedPtr<T> && rhs) {
     if (uintptr_t(&rhs) == uintptr_t(this))
-        return;
+        return *this;
 
     if (m_ptr)
         m_ptr->DecRef();
 
     m_ptr = rhs.m_ptr;
     rhs.m_ptr = nullptr;
+
+    return *this;
 }
 
 template<class T>

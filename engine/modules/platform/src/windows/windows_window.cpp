@@ -6,38 +6,56 @@
 
 namespace lite { namespace platform {
 
-static const HWND kInvalidHwnd = (HWND)-1;
-static const HWND kClosedHwnd  = (HWND)-2;
+///////////////////////////////////////////////////////////
+//
+//    Constants
+//
+///////////////////////////////////////////////////////////
+
+static const HWND kClosedHwnd  = (HWND)0;
 
 
-WindowsWindow::WindowsWindow () : m_hwnd(kInvalidHwnd) {
+///////////////////////////////////////////////////////////
+//
+//    WindowsWindow
+//
+///////////////////////////////////////////////////////////
 
+WindowsWindow::WindowsWindow (HWND handle)
+    : m_hwnd(handle)
+{
 }
 
 WindowsWindow::~WindowsWindow () {
-    if (m_hwnd != kInvalidHwnd && m_hwnd != kClosedHwnd)
-        DestroyWindow(m_hwnd);
-}
-
-void WindowsWindow::SetHandle (HWND handle) {
-    m_hwnd = handle;
+    HWND hwnd = m_hwnd.Load();
+    if (hwnd != kClosedHwnd)
+        ::DestroyWindow(hwnd);
 }
 
 bool WindowsWindow::IsClosed () const {
-    return m_hwnd == kClosedHwnd;
+    return m_hwnd.LoadRelaxed() == kClosedHwnd;
 }
 
 void WindowsWindow::Close () {
-    if (m_hwnd == kInvalidHwnd || m_hwnd == kClosedHwnd)
+    HWND hwnd = m_hwnd.Load();
+    if (hwnd == kClosedHwnd)
         return;
 
-    HWND hwnd = m_hwnd;
-    m_hwnd = kClosedHwnd;
-    PostMessageA(hwnd, WM_CLOSE, 0, 0);
+    m_hwnd.Set(kClosedHwnd);
+    SendMessageA(hwnd, WM_CLOSE, 0, 0);
+}
+
+void WindowsWindow::Destroy () {
+    HWND hwnd = m_hwnd.Load();
+    if (hwnd == kClosedHwnd)
+        return;
+
+    m_hwnd.Set(kClosedHwnd);
+    ::DestroyWindow(hwnd);
 }
 
 void * WindowsWindow::GetHandle () const {
-    return (void *)m_hwnd;
+    return (void *)m_hwnd.LoadRelaxed();
 }
 
 }} // namespace lite::platform

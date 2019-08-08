@@ -18,7 +18,7 @@ namespace lite {
 
 template<typename T>
 class Atomic {
-    static_assert(std::is_integral<T>::value, "T must be integral to be atomic");
+    static_assert(std::is_integral<T>::value || std::is_pointer<T>::value, "T must be integral to be atomic");
 public:
 
     /// You must initialize to a valid value

@@ -11,10 +11,10 @@ namespace lite { namespace platform {
 class WindowsWindow : public Window {
 public:
 
-    WindowsWindow ();
+    WindowsWindow (HWND handle);
     ~WindowsWindow ();
 
-    void SetHandle (HWND handle);
+    void Destroy ();
 
 public: // Window
 
@@ -24,7 +24,7 @@ public: // Window
 
 private:
 
-    HWND m_hwnd;
+    Atomic<HWND> m_hwnd;
 
     KeyboardState m_keyboardState;
 };

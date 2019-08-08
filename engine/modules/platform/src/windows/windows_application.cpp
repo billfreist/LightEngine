@@ -9,7 +9,7 @@
 #include <Xinput.h>
 
 #ifndef XINPUT_DLL_A
-#   define "xinput.dll"
+#   define XINPUT_DLL_A "xinput.dll"
 #endif
 
 #ifdef CreateWindow
@@ -18,9 +18,25 @@
 
 namespace lite { namespace platform {
 
+///////////////////////////////////////////////////////////
+//
+//    Constants
+//
+///////////////////////////////////////////////////////////
+
+constexpr char MsgClassName[]   = "lite_msg_pump";
+constexpr char ChildClassName[] = "lite_child_window";
+
 enum UserWindowMsg : int32_t {
     kCreateWindow = WM_USER,
 };
+
+
+///////////////////////////////////////////////////////////
+//
+//    WindowsApplication
+//
+///////////////////////////////////////////////////////////
 
 class WindowsApplication : public Application {
 public:
@@ -39,6 +55,7 @@ private:
 
     void DestroyWindow (WindowsWindow * window);
     WindowsWindow * FindWindow (HWND hwnd);
+    void RegisterChildClass ();
 
     /// Windows message processor
     static LRESULT CALLBACK HwndProc (HWND hwnd, UINT id, WPARAM wparam, LPARAM lparam);
@@ -53,6 +70,9 @@ private:
     struct WindowMapping {
         HWND      hwnd;
         WindowPtr window;
+
+        WindowMapping (WindowMapping && rhs) = default;
+        WindowMapping & operator= (WindowMapping && rhs) = default;
 
         bool operator== (const HWND & rhs) const          { return hwnd == rhs; }
         bool operator== (const WindowsWindow * rhs) const { return window.Get() == rhs; }
@@ -77,28 +97,26 @@ int WindowsApplication::Run (int argc, char ** argsv) {
     WNDCLASSEXA wnd;
     MemZero(&wnd, sizeof(wnd));
     wnd.cbSize        = sizeof(wnd);
-    wnd.style         = CS_HREDRAW | CS_VREDRAW;
     wnd.lpfnWndProc   = WindowsApplication::HwndProc;
     wnd.hInstance     = instance;
-    wnd.hIcon         = LoadIcon(nullptr, IDI_APPLICATION);
-    wnd.hCursor       = LoadCursor(nullptr, IDC_ARROW);
-    wnd.lpszClassName = "lite";
-    wnd.hIconSm       = LoadIcon(nullptr, IDI_APPLICATION);
-    RegisterClassExA(&wnd);
+    wnd.lpszClassName = MsgClassName;
+    if (::RegisterClassExA(&wnd) == 0) {
+        LITE_ASSERT(false);
+    }
 
-    m_hwnd = CreateWindowA(
-        "lite",
+    m_hwnd = CreateWindowExA(
+        0, // dwExStyle
+        MsgClassName,
         "Lite",
-        WS_OVERLAPPED, //WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-        0,    // x
-        0,    // y
-        1280, // nWidth
-        720,  // nHeight
-        nullptr, // hWndParent
-        nullptr, // hMenu
-        // Now process messages
-        instance,
-        0     // lpParam
+        WS_OVERLAPPED,
+        CW_USEDEFAULT, // x
+        CW_USEDEFAULT, // y
+        CW_USEDEFAULT, // nWidth
+        CW_USEDEFAULT, // nHeight
+        HWND_MESSAGE,  // hWndParent
+        nullptr,       // hMenu
+        instance, 
+        0              // lpParam
     );
 
     m_thread.Launch(WindowsApplication::ThreadProc, this, argc, argsv);
@@ -118,6 +136,7 @@ int WindowsApplication::Run (int argc, char ** argsv) {
     m_thread.WaitForExit();
 
     ::DestroyWindow(m_hwnd);
+    ::UnregisterClassA(MsgClassName, instance);
 
     return m_exitCode;
 }
@@ -128,10 +147,12 @@ bool WindowsApplication::Update () {
 
 WindowPtr WindowsApplication::CreateWindow () {
     const HWND id = (HWND)-intptr_t(m_windows.GetCount());
-    WindowsWindow * win = LITE_NEW(WindowsWindow);
-    auto * entry = m_windows.Add({ id, WindowPtr(win, tag::RawPtr{}) });
+    if (!m_windows.GetCount()) {
+        RegisterChildClass();
+    }
     SendMessageA(m_hwnd, kCreateWindow, WPARAM(id), 0);
-    return entry->window;
+    WindowPtr ptr = (m_windows.Term() - 1)->window;
+    return ptr;
 }
 
 void WindowsApplication::DestroyWindow (WindowsWindow * window) {
@@ -140,8 +161,11 @@ void WindowsApplication::DestroyWindow (WindowsWindow * window) {
 
     auto * mapping = std::find(m_windows.begin(), m_windows.end(), window);
     LITE_ASSERT(mapping != m_windows.end());
-    window->Close();
+    window->Destroy();
     m_windows.RemoveOrdered(mapping);
+    if (!m_windows.GetCount()) {
+        ::UnregisterClassA(ChildClassName, (HINSTANCE)GetModuleHandle(nullptr));
+    }
 }
 
 WindowsWindow * WindowsApplication::FindWindow (HWND hwnd) {
@@ -152,60 +176,62 @@ WindowsWindow * WindowsApplication::FindWindow (HWND hwnd) {
     return static_cast<WindowsWindow *>(mapping->window.Get());
 }
 
+void WindowsApplication::RegisterChildClass () {
+    auto instance = (HINSTANCE)GetModuleHandle(nullptr);
+    WNDCLASSEXA wnd;
+    MemZero(&wnd, sizeof(wnd));
+    wnd.cbSize        = sizeof(wnd);
+    wnd.style         = CS_HREDRAW | CS_VREDRAW;
+    wnd.lpfnWndProc   = WindowsApplication::HwndProc;
+    wnd.hInstance     = instance;
+    wnd.hIcon         = LoadIcon(nullptr, IDI_APPLICATION);
+    wnd.hCursor       = LoadCursor(nullptr, IDC_ARROW);
+    wnd.lpszClassName = ChildClassName;
+    wnd.hIconSm       = LoadIcon(nullptr, IDI_APPLICATION);
+    RegisterClassExA(&wnd);
+}
+
 LRESULT CALLBACK WindowsApplication::HwndProc (HWND hwnd, UINT id, WPARAM wparam, LPARAM lparam) {
-    LITE_REF(hwnd, id, wparam, lparam);
     switch (id) {
     case kCreateWindow: {
         auto instance = (HINSTANCE)GetModuleHandle(nullptr);
-        WNDCLASSEXA wnd;
-        MemZero(&wnd, sizeof(wnd));
-        wnd.cbSize        = sizeof(wnd);
-        wnd.style         = CS_HREDRAW | CS_VREDRAW;
-        wnd.lpfnWndProc   = WindowsApplication::HwndProc;
-        wnd.hInstance     = instance;
-        wnd.hIcon         = LoadIcon(nullptr, IDI_APPLICATION);
-        wnd.hCursor       = LoadCursor(nullptr, IDC_ARROW);
-        wnd.lpszClassName = "lite_child";
-        wnd.hIconSm       = LoadIcon(nullptr, IDI_APPLICATION);
-        RegisterClassExA(&wnd);
 
-        HWND childHwnd = CreateWindowA(
-            "lite_child",
+        HWND childHwnd = CreateWindowExA(
+            0,             // dwExStyle
+            ChildClassName,
             "Lite",
-            WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_POPUPWINDOW,
-            0,    // x
-            0,    // y
-            1280, // nWidth
-            720,  // nHeight
-            s_app->m_hwnd, // hWndParent
-            nullptr, // hMenu
+            WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+            CW_USEDEFAULT, // x
+            CW_USEDEFAULT, // y
+            1280,          // nWidth
+            720,           // nHeight
+            (HWND)0,       // hWndParent
+            nullptr,       // hMenu
             instance,
-            0     // lpParam
+            0              // lpParam
         );
-        for (WindowMapping & mapping : s_app->m_windows) {
-            if (mapping.hwnd != (HWND)wparam)
-                continue;
-
-            mapping.hwnd = childHwnd;
-            static_cast<WindowsWindow *>(mapping.window.Get())->SetHandle(childHwnd);
+        if (!childHwnd) {
+            LITE_ASSERT(false);
         }
+
+        WindowsWindow * win = LITE_NEW(WindowsWindow)(childHwnd);
+        s_app->m_windows.Add({ childHwnd, WindowPtr(win) });
     }
     break;
 
-    case WM_CLOSE:
-    case WM_QUIT: {
+    case WM_CLOSE: {
         s_app->DestroyWindow(s_app->FindWindow(hwnd));
-        if (s_app->m_hwnd == hwnd || !s_app->m_windows.GetCount()) {
+    }
+    break;
+
+    case WM_QUIT: {
+        if (s_app->m_hwnd == hwnd) {
             Message msg;
             msg.exit = true;
             s_app->PostMsg(std::move(msg));
             s_app->m_exit = true;
-            s_app->m_hwnd = (HWND)-1;
+            s_app->m_hwnd = (HWND)0;
         }
-        else {
-            ::DestroyWindow(hwnd);
-        }
-
         return 0;
     }
 

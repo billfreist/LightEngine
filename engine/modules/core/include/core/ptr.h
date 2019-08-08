@@ -74,25 +74,21 @@ public:
     template<class TorDerived>
     SharedPtr (TorDerived * ptrRaw, tag::RawPtr);
 
-    /// Copy construction from SharedPtr<T> or SharedPtr<DerivedFromT>
-    template<class TorDerived>
-    SharedPtr (const SharedPtr<TorDerived> & rhs);
+    /// Copy construction from SharedPtr<T>
+    SharedPtr (const SharedPtr<T> & rhs);
 
-    /// Move construction from SharedPtr<T> or SharedPtr<DerivedFromT>
-    template<class TorDerived>
-    SharedPtr (SharedPtr<TorDerived> && rhs);
+    /// Move construction from SharedPtr<T>
+    SharedPtr (SharedPtr<T> && rhs);
 
     ///
     SharedPtr () = default;
     ~SharedPtr ();
 
-    /// Copy assignment of another SharePtr<T> or SharedPtr<DerivedFromT>
-    template<class TorDerived>
-    SharedPtr & operator= (const SharedPtr<TorDerived> & rhs);
+    /// Copy assignment of another SharePtr<T>
+    SharedPtr & operator= (const SharedPtr<T> & rhs);
 
-    /// Move assignment of another SharePtr<T> or SharedPtr<DerivedFromT>
-    template<class TorDerived>
-    void operator= (SharedPtr<TorDerived> && rhs);
+    /// Move assignment of another SharePtr<T>
+    SharedPtr & operator= (SharedPtr<T> && rhs);
 
     /// Explicitly handle nullptr
     void operator= (std::nullptr_t);
@@ -126,7 +122,7 @@ private:
 
     T * m_ptr = nullptr;
 
-    template<class T> friend class SharedPtr;
+    //template<class T> friend class SharedPtr;
 };
 
 

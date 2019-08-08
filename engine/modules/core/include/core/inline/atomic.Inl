@@ -28,12 +28,12 @@ inline T Atomic<T>::LoadRelaxed () const {
 
 template<typename T>
 inline void Atomic<T>::Set (T val) {
-    return m_val.store(std::memory_order_seq_cst);
+    return m_val.store(val, std::memory_order_seq_cst);
 }
 
 template<typename T>
 inline void Atomic<T>::SetRelaxed (T val) {
-    return m_val.store(std::memory_order_relaxed);
+    return m_val.store(val, std::memory_order_relaxed);
 }
 
 template<typename T>
