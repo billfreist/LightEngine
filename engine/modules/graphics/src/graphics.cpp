@@ -64,6 +64,7 @@ class BgfxCallback final : public bgfx::CallbackI {
         , const char* _str
     ) override {
         LITE_REF(_filePath, _line, _code, _str);
+        LITE_ASSERT(false);
     }
 
     void traceVargs(
@@ -153,27 +154,27 @@ static BgfxCallback s_callback;
 class RenderContext {
 public:
 
-    RenderContext (const bgfx::PlatformData & data);
+    RenderContext (const Scene::Params & params);
     ~RenderContext ();
 
     View AllocView () { return m_viewPool++; }
 
 private:
 
-    View m_viewPool = UINT8_C(0);
+    View m_viewPool = 0;
 };
 static ExplicitConstructor<RenderContext> s_context;
 
-RenderContext::RenderContext (const bgfx::PlatformData & data) {
+RenderContext::RenderContext (const Scene::Params & params) {
     bgfx::Init init;
-    init.platformData = data;
-    init.type      = data.nwh ? bgfx::RendererType::Count : bgfx::RendererType::Noop;
+    init.type      = params.windowHandle ? bgfx::RendererType::Count : bgfx::RendererType::Noop;
     init.vendorId  = BGFX_PCI_ID_NONE;
     init.deviceId  = 0;
     init.allocator = &s_allocator;
     init.callback  = &s_callback;
     init.debug     = false;
     init.profile   = false;
+    init.platformData.nwh = params.windowHandle;
     init.resolution.maxFrameLatency = 1;
     init.resolution.width           = 1280;
     init.resolution.height          = 720;
@@ -264,10 +265,7 @@ static uint32_t s_sceneCount = 0;
 
 Scene::Scene (const Params & params) : m_params(params) {
     if (!s_sceneCount++) {
-        bgfx::PlatformData platformData;
-        MemZero(&platformData, sizeof(platformData));
-        platformData.nwh = m_params.windowHandle;
-        s_context.Init(platformData);
+        s_context.Init(params);
     }
     m_view = s_context->AllocView();
     m_debugDraw = LITE_NEW(DebugDraw);

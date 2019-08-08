@@ -359,7 +359,7 @@ public:
 
 private:
 
-    using Memory = std::aligned_storage<sizeof(T), alignof(T)>;
+    using Memory = typename std::aligned_storage<sizeof(T), alignof(T)>::type;
 
     Memory m_mem;
     bool   m_isInit = false;
