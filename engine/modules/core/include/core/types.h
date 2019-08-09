@@ -54,10 +54,10 @@ struct Type3 {
         "Type must be integral or floating point"
     );
 
-    Type3 () = default;
+    constexpr Type3 () = default;
     Type3 (tag::Uninitialized) { }
-    Type3 (T all) : x(all), y(all), z(all) { }
-    Type3 (T x, T y, T z) : x(x), y(y), z(z) { }
+    constexpr Type3 (T all) : x(all), y(all), z(all) { }
+    constexpr Type3 (T x, T y, T z) : x(x), y(y), z(z) { }
     Type3 (const Type2<T> & type2, T z) : x(type2.x), y(type2.y), z(z) { }
     Type3 (const Type3<T> & type3) : x(type3.x), y(type3.y), z(type3.z) { }
 
@@ -290,6 +290,51 @@ private:
 
 ///////////////////////////////////////////////////////////
 //
+//    ArrayView
+//
+///////////////////////////////////////////////////////////
+
+template <typename T>
+class ArrayView {
+public:
+
+    template<size_t ArraySize>
+    ArrayView (const T (& ptr)[ArraySize]) : m_data(ptr), m_count(ArraySize) { }
+    ArrayView (uint32_t count, T * ptr) : m_data(ptr), m_count(count) { }
+
+    T *       Ptr ()       { return m_data; }
+    const T * Ptr () const { return m_data; }
+
+    T *       Term ()       { return m_data + m_count; }
+    const T * Term () const { return m_data + m_count; }
+
+    uint32_t GetCount () const { return m_count; }
+
+    T &       operator[] (uint32_t i)       { LITE_ASSERT(i < m_count); return m_data[i]; }
+    const T & operator[] (uint32_t i) const { LITE_ASSERT(i < m_count); return m_data[i]; }
+
+    /// Const array view conversion
+    operator ArrayView<const T>() const { return ArrayView<const T>(GetCount(), Ptr()); }
+
+    /// Mutable iterating
+    using Iterator = T *;
+    Iterator begin () { return Ptr(); }
+    Iterator end ()   { return Term(); }
+
+    /// Const iterating
+    using ConstIterator = const T *;
+    ConstIterator begin () const { return Ptr(); }
+    ConstIterator end () const   { return Term(); }
+
+private:
+
+    T *      m_data;
+    uint32_t m_count;
+};
+
+
+///////////////////////////////////////////////////////////
+//
 //    Array
 //
 ///////////////////////////////////////////////////////////
@@ -297,6 +342,12 @@ private:
 template <typename T>
 class Array : std::vector<T> {
 public:
+
+    Array () = default;
+    Array (const Array<T> & arr) = default;
+    Array (Array<T> && arr) = default;
+    Array (const ArrayView<T> & view)       : std::vector<T>(view.begin(), view.end()) {}
+    Array (const ArrayView<const T> & view) : std::vector<T>(view.begin(), view.end()) {}
 
     T *       Ptr ()        { return std::vector<T>::data(); }
     const T * Ptr () const  { return std::vector<T>::data(); }
@@ -325,8 +376,17 @@ public:
     T & operator[] (uint32_t i)             { return std::vector<T>::at(i); }
     const T & operator[] (uint32_t i) const { return std::vector<T>::at(i); }
 
+    operator ArrayView<T>()             { return ArrayView<T>(GetCount(), Ptr()); }
+    operator ArrayView<const T>() const { return ArrayView<const T>(GetCount(), Ptr()); }
+
+    Array & operator= (const ArrayView<T> & view)       { std::vector<T>::assign(view.begin(), view.end()); return *this; }
+    Array & operator= (const ArrayView<const T> & view) { std::vector<T>::assign(view.begin(), view.end()); return *this; }
+
+    Array & operator= (const Array<T> & view) = default;
+    Array & operator= (Array<T> && view) = default;
+
     /// Mutable iterating
-    using Iterator      = T *;
+    using Iterator = T *;
     Iterator begin () { return Ptr(); }
     Iterator end ()   { return Term(); }
 
