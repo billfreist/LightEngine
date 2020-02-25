@@ -10,7 +10,7 @@ struct ModifierKeyMapping {
     int      osKey;
     Modifier key;
 };
-constexpr ModifierKeyMapping kModifierMapping[] = {
+static constexpr ModifierKeyMapping kModifierMapping[] = {
     { VK_LCONTROL, Modifier::LCtrl  },
     { VK_RCONTROL, Modifier::RCtrl  },
     { VK_LSHIFT,   Modifier::LShift },

@@ -1,1 +1,1 @@
-..\..\bx\tools\bin\windows\genie vs2017
+..\..\bx\tools\bin\windows\genie vs2019

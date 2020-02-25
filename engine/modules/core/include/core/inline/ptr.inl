@@ -69,7 +69,7 @@ inline SharedPtr<T>::SharedPtr (const SharedPtr<T> & rhs)
 }
 
 template<class T>
-inline SharedPtr<T>::SharedPtr (SharedPtr<T> && rhs)
+inline SharedPtr<T>::SharedPtr (SharedPtr<T> && rhs) noexcept
     : m_ptr(rhs.m_ptr)
 {
     rhs.m_ptr = nullptr;
@@ -114,7 +114,7 @@ void SharedPtr<T>::operator= (const SharedPtr<Derived> & rhs) {
 }
 
 template<class T>
-inline SharedPtr<T> & SharedPtr<T>::operator= (SharedPtr<T> && rhs) {
+inline SharedPtr<T> & SharedPtr<T>::operator= (SharedPtr<T> && rhs) noexcept {
     if (uintptr_t(&rhs) == uintptr_t(this))
         return *this;
 

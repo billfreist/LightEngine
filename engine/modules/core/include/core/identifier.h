@@ -27,7 +27,7 @@ namespace lite {
     private:                                                 \
                                                              \
         RawType m_val = 0;                                   \
-        static_assert(std::is_integral<RawType>::value, ""); \
+        static_assert(std::is_integral<RawType>::value);     \
     };
 
 } // namespace lite

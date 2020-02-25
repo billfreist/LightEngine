@@ -80,7 +80,7 @@ public:
     SharedPtr (const SharedPtr<T> & rhs);
 
     /// Move construction from SharedPtr<T>
-    SharedPtr (SharedPtr<T> && rhs);
+    SharedPtr (SharedPtr<T> && rhs) noexcept;
 
     ///
     SharedPtr () = default;
@@ -94,7 +94,7 @@ public:
     void operator= (const SharedPtr<Derived> & rhs);
 
     /// Move assignment of another SharePtr<T>
-    SharedPtr & operator= (SharedPtr<T> && rhs);
+    SharedPtr & operator= (SharedPtr<T> && rhs) noexcept;
 
     /// Move assignment of another SharePtr<Derived>
     template<class Derived>

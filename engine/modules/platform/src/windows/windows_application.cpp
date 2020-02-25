@@ -64,7 +64,7 @@ private:
     static uint32_t ThreadProc (WindowsApplication * thisPtr, int argc, char ** argsv);
 
     // Main application window
-    HWND m_hwnd;
+    HWND m_hwnd = (HWND)0;
     bool m_exit = false;
 
     Array<WindowPtr> m_windows;
