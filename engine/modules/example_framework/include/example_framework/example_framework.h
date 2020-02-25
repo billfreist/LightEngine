@@ -50,7 +50,7 @@ public:
 
 
 enum class ExampleFlag : uint32_t {
-
+    kNone = 0,
 };
 LITE_DEFINE_ENUM_BIT_OPERATORS(ExampleFlag);
 using ExampleFlags = Flags<ExampleFlag>;

@@ -6,7 +6,7 @@
 
 int LiteMain (int argc, char ** argsv) {
     return lite::example_framework::RunExample(
-        lite::example_framework::ExampleFlags(),
+        lite::example_framework::ExampleFlag::kNone,
         argc,
         argsv
     );
