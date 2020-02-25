@@ -23,7 +23,7 @@ public:
 
 
 /// Global new/delete overloads
-inline void * __cdecl operator new (size_t size) {
+[[nodiscard]] inline void * __cdecl operator new (size_t size) {
     return lite::CommonAllocator::Alloc(size);
 }
 
@@ -31,7 +31,7 @@ inline void __cdecl operator delete (void * ptr) {
     lite::CommonAllocator::Free(ptr);
 }
 
-inline void * __cdecl operator new[] (size_t size) {
+[[nodiscard]] inline void * __cdecl operator new[] (size_t size) {
     return lite::CommonAllocator::Alloc(size);
 }
 

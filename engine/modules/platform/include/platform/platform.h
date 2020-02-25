@@ -48,7 +48,7 @@ protected:
 
     /// The main thread procedure for the application which ultimately
     /// calls the "LiteMain" function in user code.
-    static uint32_t ThreadProc (Application * thisPtr, int argc, char ** argsv);
+    static int32_t ThreadProc (Application * thisPtr, int argc, char ** argsv);
 
     KeyboardState m_keyboardState;
     MouseState    m_mouseState;
@@ -56,8 +56,8 @@ protected:
     Lock           m_messageQueueLock;
     Array<Message> m_messageQueue;
 
-    Thread   m_thread   = { 1 * 1024 * 1024, "Application" };
-    uint32_t m_exitCode = 0;
+    Thread  m_thread   = { 1 * 1024 * 1024, "Application" };
+    int32_t m_exitCode = 0;
 };
 
 

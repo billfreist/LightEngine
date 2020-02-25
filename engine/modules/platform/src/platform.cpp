@@ -45,9 +45,9 @@ void Application::PostMsg (Message && msg) {
     m_messageQueue.Add(std::forward<Message>(msg));
 }
 
-uint32_t Application::ThreadProc (Application * thisPtr, int argc, char ** argsv) {
+int32_t Application::ThreadProc (Application * thisPtr, int argc, char ** argsv) {
     s_application = thisPtr;
-    thisPtr->m_exitCode = (uint32_t)LiteMain(argc, argsv);
+    thisPtr->m_exitCode = LiteMain(argc, argsv);
     s_application = nullptr;
     return thisPtr->m_exitCode;
 }

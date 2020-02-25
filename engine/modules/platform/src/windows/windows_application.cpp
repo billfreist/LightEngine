@@ -61,7 +61,7 @@ private:
     static LRESULT CALLBACK HwndProc (HWND hwnd, UINT id, WPARAM wparam, LPARAM lparam);
 
     /// Application thread procedure
-    static uint32_t ThreadProc (WindowsApplication * thisPtr, int argc, char ** argsv);
+    static int32_t ThreadProc (WindowsApplication * thisPtr, int argc, char ** argsv);
 
     // Main application window
     HWND m_hwnd = (HWND)0;
@@ -245,8 +245,8 @@ LRESULT CALLBACK WindowsApplication::HwndProc (HWND hwnd, UINT id, WPARAM wparam
     return DefWindowProc(hwnd, id, wparam, lparam);
 }
 
-uint32_t WindowsApplication::ThreadProc (WindowsApplication * thisPtr, int argc, char ** argsv) {
-    const uint32_t exitCode = Application::ThreadProc(thisPtr, argc, argsv);
+int32_t WindowsApplication::ThreadProc (WindowsApplication * thisPtr, int argc, char ** argsv) {
+    const int32_t exitCode = Application::ThreadProc(thisPtr, argc, argsv);
     PostMessageA(thisPtr->m_hwnd, WM_QUIT, 0, 0);
     return exitCode;
 }
