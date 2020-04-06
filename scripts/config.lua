@@ -53,6 +53,7 @@ configuration { "vs*", "x32 or x64" }
         "/wd4595",  -- warning C4595: 'operator new': non-member operator new or delete functions may not be declared inline
         "/wd26495", -- warning C26495: Variable '' is uninitialized. Always initialize a member variable
         "/wd26812", -- warning C26812: The enum type 'enum' is unscoped. Prefer 'enum class' over 'enum'
+        "/wd28251", -- warning C28251: Inconsistent annotation for 'new'
     }
 
 configuration { "vs*", "x32 or x64", "Release" }

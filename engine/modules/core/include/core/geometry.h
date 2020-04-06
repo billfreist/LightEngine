@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <core/core.h>
+#include <core/types.h>
+
 namespace lite {
 
 struct Sphere {

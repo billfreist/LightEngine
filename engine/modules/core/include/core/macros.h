@@ -16,6 +16,7 @@
 #if defined(_WIN32) || defined(_WIN64)
 #   define LITE_OS_WINDOWS 1
 #   define WIN32_LEAN_AND_MEAN
+#   define NOMINMAX
 #else
 #   define LITE_OS_WINDOWS 0
 #endif

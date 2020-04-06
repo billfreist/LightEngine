@@ -6,6 +6,10 @@
 
 #pragma once
 
+#ifndef LITE_CORE_H_INCLUDED
+#   error "Must be included through core.h"
+#endif // LITE_CORE_H_INCLUDED
+
 namespace lite {
 
 class CommonAllocator {

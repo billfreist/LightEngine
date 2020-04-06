@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <core/core.h>
 #include <core/debug_drawer.h>
 
 namespace lite::graphics {

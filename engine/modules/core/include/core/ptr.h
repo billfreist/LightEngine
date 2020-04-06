@@ -4,8 +4,11 @@
 
 #pragma once
 
-#include <memory>
-#include <type_traits>
+#ifndef LITE_CORE_H_INCLUDED
+#   error "Must be included through core.h"
+#endif // LITE_CORE_H_INCLUDED
+
+#include <core/atomic.h>
 
 ///////////////////////////////////////////////////////////
 //

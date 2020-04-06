@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include <core/ptr.h>
+#include <core/core.h>
+#include <core/types.h>
 
 namespace lite::platform {
 

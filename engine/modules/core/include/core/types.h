@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <vector>
+
 #ifdef _MSC_VER
 #    define LITE_NO_VTABLE __declspec(novtable)
 #else
@@ -29,9 +31,11 @@ struct Type2 {
         "Type must be integral or floating point"
     );
 
-    Type2 () = default;
-    Type2 (tag::Uninitialized) { }
-    Type2 (T x, T y) : x(x), y(y) { }
+    Type2 (tag::Uninitialized)                   { }
+    constexpr Type2 (tag::Zero) : x(0), y(0)     { }
+    constexpr Type2 (T all) : x(all), y(all)     { }
+    constexpr Type2 (T x, T y, T z) : x(x), y(y) { }
+    constexpr Type2 (const Type2<T>& type2) : x(type2.x), y(type2.y) { }
 
     T x, y;
 };
@@ -54,12 +58,12 @@ struct Type3 {
         "Type must be integral or floating point"
     );
 
-    constexpr Type3 () = default;
     Type3 (tag::Uninitialized) { }
-    constexpr Type3 (T all) : x(all), y(all), z(all) { }
+    constexpr Type3 (tag::Zero) : x(0), y(0), z(0)     { }
+    constexpr Type3 (T all) : x(all), y(all), z(all)   { }
     constexpr Type3 (T x, T y, T z) : x(x), y(y), z(z) { }
-    Type3 (const Type2<T> & type2, T z) : x(type2.x), y(type2.y), z(z) { }
-    Type3 (const Type3<T> & type3) : x(type3.x), y(type3.y), z(type3.z) { }
+    constexpr Type3 (const Type2<T> & type2, T z) : x(type2.x), y(type2.y), z(z)  { }
+    constexpr Type3 (const Type3<T> & type3) : x(type3.x), y(type3.y), z(type3.z) { }
 
     Type3 & operator= (const Type3 & rhs) { x = rhs.x; y = rhs.y; z = rhs.z; return *this; }
 
@@ -97,12 +101,12 @@ struct Type4 {
         "Type must be integral or floating point"
     );
 
-    Type4 () = default;
     Type4 (tag::Uninitialized) { }
-    Type4 (T all) : x(all), y(all), z(all), w(all) { }
-    Type4 (T x, T y, T z, T w) : x(x), y(y), z(z), w(w) { }
-    Type4 (const Type3<T> & type3, T w) : x(type3.x), y(type3.y), z(type3.z), w(w) { }
-    Type4 (const Type4<T> & type4) : x(type4.x), y(type4.y), z(type4.z), w(type4.w) { }
+    constexpr Type4 (tag::Zero) : x(0), y(0), z(0), w(0)          { }
+    constexpr Type4 (T all) : x(all), y(all), z(all), w(all)      { }
+    constexpr Type4 (T x, T y, T z, T w) : x(x), y(y), z(z), w(w) { }
+    constexpr Type4 (const Type3<T> & type3, T w) : x(type3.x), y(type3.y), z(type3.z), w(w)  { }
+    constexpr Type4 (const Type4 & type4) : x(type4.x), y(type4.y), z(type4.z), w(type4.w) { }
 
     Type4 & operator= (const Type4 & rhs) { x = rhs.x; y = rhs.y; z = rhs.z; w = rhs.w; return *this; }
 
@@ -140,6 +144,12 @@ struct Type6 {
         "Type must be integral or floating point"
     );
 
+    Type6 (tag::Uninitialized tag)  : min(tag), max(tag) { }
+    constexpr Type6 (tag::Zero tag) : min(tag), max(tag) { }
+    constexpr Type6 (const Type3<T> & min, const Type3<T> & max) : min(min) , max(max) { }
+
+    Type6& operator= (const Type6& rhs) { min = rhs.min; max = rhs.max; return *this; }
+
     Type3<T> min;
     Type3<T> max;
 };
@@ -162,6 +172,13 @@ struct Color4 {
         "Type must be integral or floating point"
     );
 
+    Color4 (tag::Uninitialized) { }
+    constexpr Color4 (tag::Zero) : r(0), g(0), b(0), a(0)          { }
+    constexpr Color4 (T r, T g, T b, T a) : r(r), g(g), b(b), a(a) { }
+    constexpr Color4 (const Color4& rhs) : r(rhs.r), g(rhs.g), b(rhs.b), a(rhs.a) { }
+
+    Color4& operator= (const Color4& rhs) { r = rhs.r; g = rhs.g; b = rhs.b; a = rhs.a; return *this; }
+
     T r, g, b, a;
 };
 using Color4b = Color4<uint8_t>;
@@ -177,17 +194,19 @@ using Color4f = Color4<float>;
 class Quaternion {
 public:
 
-    Vec4f m_vec;
-
     Quaternion (tag::Identity)
         : m_vec{ 0.0f, 0.0f, 0.0f, 1.0f }
     {
     }
 
-    Quaternion (tag::Uninitialized) {
+    Quaternion (tag::Uninitialized tag)
+        : m_vec(tag)
+    {
     }
 
-    Quaternion (const Vec4f & raw) : m_vec(raw) {
+    explicit Quaternion (const Vec4f & raw)
+        : m_vec(raw)
+    {
     }
 
     Quaternion (float x, float y, float z, float w)
@@ -195,8 +214,18 @@ public:
     {
     }
 
-    Quaternion (const Vec3f & axis, float angle) {
+    Quaternion (const Vec3f & axis, float angle)
+        : m_vec(0.0f, 0.0f, 0.0f, 1.0f)
+    {
         LITE_REF(axis, angle);
+    }
+
+    explicit operator Vec4f () const {
+        return m_vec;
+    }
+
+    const Vec4f & GetVec () const {
+        return m_vec;
     }
 
     ///
@@ -222,6 +251,10 @@ public:
             m_vec = { 0.0f, 0.0f, 0.0f, 1.0f };
         }
     }
+
+private:
+
+    Vec4f m_vec;
 };
 
 

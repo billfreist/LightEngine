@@ -4,6 +4,8 @@
 
 #include "pch.h"
 
+#include <core/perf/profiler.h>
+
 namespace lite::example_framework {
 
 ///
@@ -82,6 +84,7 @@ int ExampleApp::Run (int argc, char ** argsv) {
     // Render loop
     int returnVal = 0;
     for (;;) {
+        PROFILER_NAMED_SCOPE("ExampleFramework Main");
         if (app->Update() || window->IsClosed()) {
             break;
         }
@@ -91,12 +94,15 @@ int ExampleApp::Run (int argc, char ** argsv) {
             example = ExampleFactory::Get()->Create();
 
         if (example) {
+            PROFILER_NAMED_SCOPE("Example Update");
             returnVal = example->Update();
             if (returnVal)
                 break;
         }
 
         scene.Render();
+
+        PROFILER_TICK();
     }
     if (example)
         LITE_DEL(example);

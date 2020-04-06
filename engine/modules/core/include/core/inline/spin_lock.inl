@@ -10,7 +10,7 @@ inline bool SpinLock::TryEnter () {
         return true;
 
     // Catch reentrant locks.
-    if (IsEnabled<LITE_BUILD_DEBUG>())
+    if constexpr (LITE_BUILD_DEBUG)
         return m_lock.CompareExchangeStrong(threadId, threadId);
     else
         return false;

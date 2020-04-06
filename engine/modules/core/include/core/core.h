@@ -9,37 +9,20 @@
 #endif
 #define LITE_CORE_H_INCLUDED
 
-#include <atomic>
 #include <stdint.h>
-#include <mutex>
-#include <vector>
-#include <thread>
 #include <new>
+#include <memory>
+#include <functional>
 #include <fstream>
 #include <type_traits>
-
-// Enabled
-namespace lite {
-template<int VAL>
-inline bool IsEnabled () {
-    return true;
-}
-template<>
-inline bool IsEnabled<0> () {
-    return false;
-}
-} // lite
 
 // Include macros first
 #include <core/macros.h>
 
-// The include everything else
+// Then include everything else
 #include <core/tags.h>
 #include <core/allocator.h>
 #include <core/common_allocator.h>
 #include <core/memory.h>
-#include <core/types.h>
-#include <core/atomic.h>
 #include <core/ptr.h>
-#include <core/spin_lock.h>
-#include <core/thread.h>
+

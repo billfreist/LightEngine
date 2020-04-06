@@ -4,6 +4,8 @@
 
 #include "pch.h"
 
+#include <core/types.h>
+
 namespace lite {
 
 TEST(Vec3, Operators) {

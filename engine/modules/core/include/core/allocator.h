@@ -4,6 +4,10 @@
 
 #pragma once
 
+#ifndef LITE_CORE_H_INCLUDED
+#   error "Must be included through core.h"
+#endif // LITE_CORE_H_INCLUDED
+
 /// Macros
 
 // Alloc
@@ -21,7 +25,7 @@
 #define LITE_DEL(ptr)          lite::Delete(ptr);
 
 // Stack allocations
-#define LITE_STACK_ALLOC(T, n) reinterpret_cast<T *>(alloca(sizeof(T) * n))
+#define LITE_STACK_ALLOC(T, n) reinterpret_cast<T *>(_malloca(sizeof(T) * n))
 
 namespace lite {
 

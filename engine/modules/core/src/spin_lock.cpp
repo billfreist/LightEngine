@@ -4,6 +4,8 @@
 
 #include "pch.h"
 
+#include <core/spin_lock.h>
+
 namespace lite {
 
 const uint32_t SPIN_COUNT = 75;

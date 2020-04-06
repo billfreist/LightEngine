@@ -4,6 +4,9 @@
 
 #include "pch.h"
 
+#include <core/thread.h>
+#include <core/perf/profiler.h>
+
 namespace lite {
 
 ///////////////////////////////////////////////////////////
@@ -14,6 +17,7 @@ namespace lite {
 
 Thread::Thread (uint32_t stackSize, const char * name) {
     LITE_REF(stackSize, name);
+    //PROFILER_THREAD_NAME(name);
 }
 
 Thread::~Thread () {

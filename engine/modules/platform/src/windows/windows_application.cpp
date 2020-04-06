@@ -8,6 +8,8 @@
 
 #include <Xinput.h>
 
+#include <core/perf/profiler.h>
+
 #ifndef XINPUT_DLL_A
 #   define XINPUT_DLL_A "xinput.dll"
 #endif
@@ -117,6 +119,7 @@ int WindowsApplication::Run (int argc, char ** argsv) {
         // Wait for input idle for ~16ms, which roughly equates to 60fps
         WaitForInputIdle(GetCurrentProcess(), 16);
 
+        PROFILER_NAMED_SCOPE("Process Win Messages");
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);

@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include <core/core.h>
+#include <core/thread.h>
+#include <core/types.h>
+
 namespace lite::physics {
 
 ///////////////////////////////////////////////////////////
@@ -40,7 +44,7 @@ struct ShapeSphere final : Shape {
     ///
     float radius;
 
-    ShapeSphere () : Shape(ShapeType::kSphere) { }
+    ShapeSphere () : Shape(ShapeType::kSphere), localPos(tag::Zero{}) { }
 
 private:
     ~ShapeSphere () = default;
